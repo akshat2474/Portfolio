@@ -11,9 +11,10 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryTextColor = Colors.white;
-    const Color secondaryTextColor = Color(0xFFAAAAAA);
-    const Color backgroundColor = Colors.black;
+    const Color primaryTextColor = Color(0xFFEAEAEA);
+    const Color secondaryTextColor = Color(0xFF8A8A8A);
+    const Color backgroundColor = Color(0xFF0A0A0A);
+    const Color cardBackgroundColor = Color(0xFF141414);
 
     return MaterialApp(
       title: 'Akshat Singh - Portfolio',
@@ -22,40 +23,31 @@ class PortfolioApp extends StatelessWidget {
         brightness: Brightness.dark,
         primaryColor: primaryTextColor,
         scaffoldBackgroundColor: backgroundColor,
-        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
-          displayLarge: GoogleFonts.inter(
-            fontSize: 48,
-            fontWeight: FontWeight.w800,
-            color: primaryTextColor,
-          ),
-          headlineMedium: GoogleFonts.inter(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: primaryTextColor,
-          ),
-          bodyLarge: GoogleFonts.inter(
-            fontSize: 16,
-            height: 1.7,
-            color: secondaryTextColor,
-          ),
-          titleMedium: GoogleFonts.jetBrainsMono(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: primaryTextColor,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryTextColor,
-            foregroundColor: backgroundColor,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            textStyle: GoogleFonts.inter(
+        cardColor: cardBackgroundColor,
+        textTheme:
+            GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
+          displayMedium: GoogleFonts.inter(
+              fontSize: 36,
+              fontWeight: FontWeight.w800,
+              color: primaryTextColor),
+          headlineSmall: GoogleFonts.inter(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: secondaryTextColor,
+              letterSpacing: 0.5),
+          titleMedium: GoogleFonts.inter(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-            ),
+              color: primaryTextColor),
+          bodyLarge: GoogleFonts.inter(
+              fontSize: 16, height: 1.6, color: secondaryTextColor),
+          bodyMedium:
+              GoogleFonts.inter(fontSize: 14, color: secondaryTextColor),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: primaryTextColor,
+            textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600),
           ),
         ),
       ),

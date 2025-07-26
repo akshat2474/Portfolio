@@ -1,4 +1,3 @@
-// lib/widgets/skill_chip.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,7 +21,7 @@ class SkillChip extends StatelessWidget {
       child: Text(
         label,
         style: GoogleFonts.jetBrainsMono(
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha:0.8),
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),

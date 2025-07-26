@@ -1,167 +1,174 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'models/project_model.dart'; 
-import 'widgets/project_card.dart';
-import 'widgets/section_title.dart';
+import 'models/project_model.dart';
+import 'models/song_model.dart';
 import 'widgets/background_painter.dart';
-import 'widgets/skill_chip.dart';
+import 'widgets/project_card.dart';
+import 'widgets/tag_chip.dart';
 
-class PortfolioPage extends StatelessWidget {
+class PortfolioPage extends StatefulWidget {
   const PortfolioPage({super.key});
 
-  static final List<Project> projects = [
+  @override
+  State<PortfolioPage> createState() => _PortfolioPageState();
+}
+
+class _PortfolioPageState extends State<PortfolioPage> {
+  late Song _currentSong;
+  final Random _random = Random();
+
+  static final List<Song> _favoriteSongs = [
+    const Song(title: "Duniyaa", artist: "from Luka Chuppi"),
+    const Song(title: "Starboy", artist: "The Weeknd ft. Daft Punk"),
+    const Song(title: "Blinding Lights", artist: "The Weeknd"),
+    const Song(title: "As It Was", artist: "Harry Styles"),
+    const Song(title: "STAY", artist: "The Kid LAROI, Justin Bieber"),
+    const Song(title: "INDUSTRY BABY", artist: "Lil Nas X, Jack Harlow"),
+    const Song(title: "Run Away With Me", artist: "Carly Rae Jepsen"),
+    const Song(title: "Call Me Maybe", artist: "Carly Rae Jepsen"),
+    const Song(title: "Cut to the Feeling", artist: "Carly Rae Jepsen"),
+    const Song(title: "I Really Like You", artist: "Carly Rae Jepsen"),
+    const Song(title: "Want You in My Room", artist: "Carly Rae Jepsen"),
+    const Song(title: "HUMBLE.", artist: "Kendrick Lamar"),
+    const Song(title: "Money Trees", artist: "Kendrick Lamar ft. Jay Rock"),
+    const Song(title: "Alright", artist: "Kendrick Lamar"),
+    const Song(title: "DNA.", artist: "Kendrick Lamar"),
+    const Song(title: "Not Like Us", artist: "Kendrick Lamar"),
+    const Song(title: "Toxic", artist: "Britney Spears"),
+    const Song(title: "...Baby One More Time", artist: "Britney Spears"),
+    const Song(title: "Gimme More", artist: "Britney Spears"),
+    const Song(title: "Womanizer", artist: "Britney Spears"),
+    const Song(title: "Oops!... I Did It Again", artist: "Britney Spears"),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshSong();
+  }
+
+  void _refreshSong() {
+    setState(() {
+      _currentSong = _favoriteSongs[_random.nextInt(_favoriteSongs.length)];
+    });
+  }
+
+  static const List<Project> projects = [
     Project(
-      title: 'Color Harmony — Accessible Palette Designer',
-      liveUrl: 'https://colorharmony-akshat.netlify.app/', // Link added
-      description:
-          'A feature-rich color workflow app for designers/devs that lets you generate, edit, test, and manage accessible color palettes, plus experiment with drawing, patterns, and image-based color extraction.',
-      coreFeatures: [
-        '6+ harmony algorithms (complementary, triadic, etc.)',
-        'WCAG AA/AAA contrast checker',
-        'Drawing Pad and Pattern Creator',
-        'Image color extraction',
-        'Saved palettes, search, and export flows.',
-      ],
-      techStack:
-          'Flutter, Dart, palette_generator, flutter_colorpicker, shared_preferences, image_picker',
-      implementationDetails:
-          'Clean separation of services (color, storage, accessibility) and widgets. Accessibility checks abstracted into a dedicated service for reuse.',
-      gaps:
-          'Consider CIE L*a*b* distance for perceptual uniformity. Add export to design tokens (CSS, Figma JSON). Add cloud sync (Firebase) for collaborative workflows.',
+      title: 'CarbonEye',
+      liveUrl: 'https://akshat2474.github.io/CarbonEye/',
+      description: 'A vision and analytics system for environmental analysis.',
+      icon: FontAwesomeIcons.leaf,
+      year: 2023,
+      tags: ['Flutter', 'Python'],
+      coreFeatures: ['API for programmatic analysis', 'Before/After satellite imagery comparison', 'Detailed reports on detected changes'],
+      techStack: 'Flutter, Python, Google Earth Engine, ML/CV Models, Static Site Generation',
+      implementationDetails: 'API documentation site built with a focus on clear code examples. Structured report generation.',
+      gaps: 'Clarify model validation and measurement accuracy disclaimers. Offer SDK clients (Python/JS) for the API.',
     ),
     Project(
-      title: 'RetroDash — Flutter Arcade Shooter',
-      liveUrl: 'https://akshat-retro-dash.netlify.app/', // Link added
-      description:
-          'A fast, retro-styled arcade shooter with auto-fire mode, stackable power-ups, screen-clearing nukes, and challenging boss fights.',
-      coreFeatures: [
-        'Dual modes: Auto-fire and Manual',
-        'Stackable power-ups and screen-clearing nukes',
-        'Deterministic boss fights at score thresholds',
-        'Local leaderboard and personal best tracking.',
-      ],
-      techStack:
-          'Flutter (desktop, mobile, web) with custom game loop and state management',
-      implementationDetails:
-          'Clear widget modularization (animated background, audio player, boss logic). Predictable progression curve via deterministic score thresholds for power-ups.',
-      gaps:
-          'Add deterministic enemy spawn seeds to enable replays/speedruns. Implement frame-independent movement (time delta) for cross-platform consistency. Integrate Game Services for cloud leaderboards.',
+      title: 'Color Harmony',
+      liveUrl: 'https://colorharmony-akshat.netlify.app/',
+      description: 'A feature-rich color workflow app for designers and developers.',
+      icon: FontAwesomeIcons.palette,
+      year: 2024,
+      tags: ['Flutter', 'Dart'],
+      coreFeatures: ['6+ harmony algorithms', 'WCAG AA/AAA contrast checker', 'Drawing Pad', 'Image color extraction'],
+      techStack: 'Flutter, Dart, palette_generator, flutter_colorpicker, shared_preferences, image_picker',
+      implementationDetails: 'Clean separation of services and widgets. Accessibility checks abstracted into a dedicated service.',
+      gaps: 'Consider CIE L*a*b* distance for perceptual uniformity. Add export to design tokens (CSS, Figma JSON).',
     ),
     Project(
-      title: 'CarbonEye — Emission Analysis API',
-      liveUrl: 'https://akshat2474.github.io/CarbonEye/', // Link added
-      description:
-          'An analytics system for detecting and estimating carbon emissions or other environmental parameters from live camera feeds or static images.',
-      coreFeatures: [
-        'API for programmatic analysis',
-        'Before/After satellite imagery comparison',
-        'Detailed reports on detected changes',
-        'Live analysis tool and code samples.',
-      ],
-      techStack:
-          'Flutter, Python, Google Earth Engine, ML/CV Models, Static Site Generation',
-      implementationDetails:
-          'API documentation site built with a focus on clear code examples (Curl, JavaScript). Analysis results presented in a detailed, structured report.',
-      gaps:
-          'Clarify model validation and measurement accuracy disclaimers. Provide benchmark datasets and evaluation reports. Offer SDK clients (Python/JS) for the API.',
+      title: 'RetroDash',
+      liveUrl: 'https://akshat-retro-dash.netlify.app/',
+      description: 'A fast, retro-styled arcade shooter with stackable power-ups.',
+      icon: FontAwesomeIcons.gamepad,
+      year: 2024,
+      tags: ['Flutter', 'Game Dev'],
+      coreFeatures: ['Dual modes: Auto-fire and Manual', 'Stackable power-ups', 'Deterministic boss fights', 'Local leaderboard'],
+      techStack: 'Flutter (desktop, mobile, web) with custom game loop and state management',
+      implementationDetails: 'Clear widget modularization. Predictable progression curve via deterministic score thresholds.',
+      gaps: 'Add deterministic enemy spawn seeds for replays. Implement frame-independent movement. Integrate cloud leaderboards.',
     ),
     Project(
-      title: 'Hand2Hand — Volunteer ↔ NGO Routing',
-      description:
-          'A tech-for-good Flutter app that routes resource donations from volunteers to the nearest NGO, with auto-fallback if declined.',
-      coreFeatures: [
-        'Geo-based notifications to closest NGO',
-        'Fallback logic to notify next nearest NGO',
-        'In-app notification inbox',
-        'Impact analytics and multi-language support on roadmap.',
-      ],
-      techStack:
-          'Flutter, Firebase (Auth, Firestore, Performance), flutter_map, Provider, GoRouter, Gemini API',
-      implementationDetails:
-          'Fallback logic encapsulated in a custom widget. Simple but explicit Firestore collections (users, donations, notifications) with roles, status, and timestamps.',
-      gaps:
-          'Migrate fallback logic to Cloud Functions to avoid client-side vulnerabilities. Add Firestore security rules and transactional writes for consistency.',
+      title: 'Hand2Hand',
+      liveUrl: 'https://github.com/akshat2474/Hand2Hand',
+      description: 'A tech-for-good app to route donations from volunteers to NGOs.',
+      icon: FontAwesomeIcons.handHoldingHeart,
+      year: 2023,
+      tags: ['Flutter', 'Firebase'],
+      coreFeatures: ['Geo-based notifications', 'Fallback logic to next nearest NGO', 'In-app notification inbox'],
+      techStack: 'Flutter, Firebase (Auth, Firestore, Performance), flutter_map, Provider, GoRouter, Gemini API',
+      implementationDetails: 'Fallback logic encapsulated in a custom widget. Simple but explicit Firestore collections.',
+      gaps: 'Migrate fallback logic to Cloud Functions. Add Firestore security rules and transactional writes.',
+    ),
+     Project(
+      title: 'TimeWise',
+      liveUrl: 'https://github.com/akshat2474/TimeWise',
+      description: 'A smart attendance tracker and timetable for students.',
+      icon: FontAwesomeIcons.solidClock,
+      year: 2022,
+      tags: ['Flutter', 'Productivity'],
+      coreFeatures: ['Calendar-based marking (Present, Absent, etc.)', 'Per-subject stats (how many classes you can skip)', '“What-if” calculator for planning', 'Charts, history, and CSV export.'],
+      techStack: 'Flutter, Provider, shared_preferences, flutter_local_notifications, table_calendar, fl_chart, csv',
+      implementationDetails: 'The “What-if calculator” provides excellent UX for students. Clean separation between data models (Subject, Timetable) and services (notifications, export).',
+      gaps: 'Add cloud backup/sync (Firestore) so students don’t lose history. Add import from university timetables (CSV/ICS).',
     ),
     Project(
-      title: 'TimeWise — Smart Attendance Tracker',
-      description:
-          'A student-first attendance tracker with custom timetables, daily calendar marking, analytics, and a what-if simulator to plan remaining classes.',
-      coreFeatures: [
-        'Calendar-based marking (Present, Absent, etc.)',
-        'Per-subject stats (how many classes you can skip)',
-        '“What-if” calculator for planning',
-        'Charts, history, and CSV export.',
-      ],
-      techStack:
-          'Flutter, Provider, shared_preferences, flutter_local_notifications, table_calendar, fl_chart, csv',
-      implementationDetails:
-          'The “What-if calculator” provides excellent UX for students. Clean separation between data models (Subject, Timetable) and services (notifications, export).',
-      gaps:
-          'Add cloud backup/sync (Firestore) so students don’t lose history. Add import from university timetables (CSV/ICS).',
-    ),
-    Project(
-      title: 'TrainOS — Professional Fitness Tracker',
-      description:
-          'A persistent step tracker and sleep logger with health scoring, detailed analytics, and gamified achievements.',
-      coreFeatures: [
-        'Persistent step count (survives app restarts)',
-        'Personalized calorie & distance tracking',
-        'Manual sleep logging with weekly charts',
-        'Achievement system for consistency and milestones.',
-      ],
-      techStack:
-          'Flutter, shared_preferences, fl_chart, Android NDK for desugaring',
-      implementationDetails:
-          'Separate services per domain (fitness, sleep, health score), which keeps logic composable and testable. Explicit Android desugaring config to support modern libraries.',
-      gaps:
-          'Integrate with Health Connect / Apple HealthKit instead of manual logging. Background step tracking on iOS requires a native bridge. Add goal-based coaching.',
+      title: 'TrainOS',
+      liveUrl: 'https://github.com/akshat2474/TrainOS',
+      description: 'A persistent fitness tracker with health scoring and analytics.',
+      icon: FontAwesomeIcons.heartPulse,
+      year: 2022,
+      tags: ['Flutter', 'Health'],
+      coreFeatures: ['Persistent step count (survives app restarts)', 'Personalized calorie & distance tracking', 'Manual sleep logging with weekly charts', 'Achievement system for consistency and milestones.'],
+      techStack: 'Flutter, shared_preferences, fl_chart, Android NDK for desugaring',
+      implementationDetails: 'Separate services per domain (fitness, sleep, health score), which keeps logic composable and testable. Explicit Android desugaring config to support modern libraries.',
+      gaps: 'Integrate with Health Connect / Apple HealthKit instead of manual logging. Background step tracking on iOS requires a native bridge. Add goal-based coaching.',
     ),
   ];
-  //... rest of the PortfolioPage class
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(child: CustomPaint(painter: BackgroundPainter())),
+          Positioned.fill(
+            child: CustomPaint(painter: BackgroundPainter()),
+          ),
           Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1200),
+              constraints: const BoxConstraints(maxWidth: 800),
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
                 children: [
-                  const SizedBox(height: 80),
-                  _buildHeroSection(context),
-                  const SizedBox(height: 80),
-
-                  const SectionTitle(title: 'About Me'),
-                  Text(
-                    "I'm a passionate developer and student from India with a strong interest in mobile development using Flutter and exploring the world of Python and Machine Learning. I love building useful tools, solving complex problems, and continuously learning new technologies.",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 80),
-
-                  const SectionTitle(title: 'Skills'),
-                  _buildSkillsGrid(),
-                  const SizedBox(height: 80),
-
-                  const SectionTitle(title: 'My Projects'),
-                  _buildProjectsList(), // Updated to a list
-                  const SizedBox(height: 80),
-
-                  const SectionTitle(title: 'Get In Touch'),
-                  _buildContactSection(context),
-                  const SizedBox(height: 80),
-
-                  const Text(
-                    '© 2025 Akshat Singh',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white38),
-                  ),
-                  const SizedBox(height: 40),
+                  _buildHeader(context),
+                  const SizedBox(height: 48),
+                  _buildIntroSection(context),
+                  const SizedBox(height: 48),
+                  _buildSectionTitle('CURRENTLY', context),
+                  const SizedBox(height: 16),
+                  _buildCurrentRole(context),
+                  const SizedBox(height: 48),
+                  _buildSectionTitle('RECENT PROJECTS', context),
+                  const SizedBox(height: 16),
+                  _buildProjectsSection(),
+                  const SizedBox(height: 48),
+                  _buildSectionTitle('TECHNOLOGIES', context),
+                  const SizedBox(height: 24),
+                  _buildTechnologiesGrid(),
+                  const SizedBox(height: 48),
+                  _buildSectionTitle('CURRENTLY LISTENING TO', context),
+                  const SizedBox(height: 16),
+                  _buildListeningSection(context),
+                  const SizedBox(height: 48),
+                  const Divider(color: Color(0xFF2A2A2A)),
+                  const SizedBox(height: 16),
+                  const Center(child: Text('© 2025 Akshat Singh', style: TextStyle(color: Colors.white38, fontSize: 12))),
                 ],
               ),
             ),
@@ -171,108 +178,176 @@ class PortfolioPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
-    return Column(
+  Widget _buildHeader(BuildContext context) {
+    void launchURL(String url) async {
+      if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Akshat Singh',
-          style: Theme.of(context).textTheme.displayLarge,
-          textAlign: TextAlign.center,
+          'AKSHAT SINGH',
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-        const SizedBox(height: 8),
-        Text(
-          'Flutter Developer & Tech Enthusiast',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(fontSize: 20, color: Colors.white70),
-          textAlign: TextAlign.center,
+        Row(
+          children: [
+            IconButton(
+              tooltip: 'GitHub',
+              icon: const FaIcon(FontAwesomeIcons.github, size: 20),
+              onPressed: () => launchURL('https://github.com/akshat2474'),
+            ),
+            IconButton(
+              tooltip: 'LinkedIn',
+              icon: const FaIcon(FontAwesomeIcons.linkedin, size: 20),
+              onPressed: () => launchURL('https://www.linkedin.com/in/akshat-singh-48a03b312/'),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildSectionTitle(String title, BuildContext context) {
+    return Text(title, style: Theme.of(context).textTheme.headlineSmall);
+  }
+
+  Widget _buildIntroSection(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CircleAvatar(
+          radius: 36,
+          backgroundImage: AssetImage('assets/images/avatar.png'),
+          backgroundColor: Color(0xFF1A1A1A),
+        ),
+        const SizedBox(width: 24),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Hi, I'm Akshat Singh,",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20)),
+              const SizedBox(height: 8),
+              Text(
+                "a Flutter developer and tech enthusiast specializing in building beautiful, high-performance applications with a strong attention to detail.",
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSkillsGrid() {
-    return const Center(
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
-        alignment: WrapAlignment.center,
-        children: [
-          SkillChip(label: 'Flutter'),
-          SkillChip(label: 'Dart'),
-          SkillChip(label: 'Python'),
-          SkillChip(label: 'Firebase'),
-          SkillChip(label: 'UI/UX Design'),
-          SkillChip(label: 'REST APIs'),
-          SkillChip(label: 'Git & GitHub'),
-          SkillChip(label: 'Machine Learning'),
-        ],
+  Widget _buildCurrentRole(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'CSE Student',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const Row(
+              children: [
+                TagChip(label: 'DTU', icon: Icons.school_outlined),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '2024 - PRESENT',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 12),
+        Text(
+          'Pursuing a degree in Computer Science and Engineering at Delhi Technological University, with a focus on software development and machine learning.',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildProjectsSection() {
+    return SizedBox(
+      height: 200,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: projects.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 16),
+        itemBuilder: (context, index) {
+          return ProjectCard(project: projects[index]);
+        },
       ),
     );
   }
 
-  // This new widget builds a list of your project cards
-  Widget _buildProjectsList() {
-    return Column(
-      children:
-          projects
-              .map(
-                (project) => Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0),
-                  child: ProjectCard(project: project),
-                ),
-              )
-              .toList(),
+  Widget _buildTechnologiesGrid() {
+    final technologies = {
+      'Flutter': 'assets/images/flutter.svg',
+      'Python': 'assets/images/python.svg',
+      'Pytorch':'assets/images/pytorch.svg',
+      'Scikit-Learn':'assets/images/scikitlearn.svg',
+      'Tensorflow':'assets/images/tensorflow.svg',
+      'Firebase': 'assets/images/firebase.svg',
+      'Cpp': 'assets/images/cplusplus.svg',
+      'Git': 'assets/images/git.svg',
+      'Canva':'assets/images/canva.svg',
+    };
+
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: technologies.entries.map((entry) {
+        return Tooltip(
+          message: entry.key,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1A1A),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFF2A2A2A)),
+            ),
+            child: SvgPicture.asset(
+              entry.value,
+              height: 32,
+              width: 32,
+              colorFilter:
+                  const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
-  Widget _buildContactSection(BuildContext context) {
-    // Helper function for launching URLs
-    void _launchURL(String url) async {
-      if (!await launchUrl(Uri.parse(url))) {
-        throw 'Could not launch $url';
-      }
-    }
-
-    return Column(
-      children: [
-        Text(
-          "I'm currently open to new opportunities and collaborations. Feel free to reach out if you have a project in mind or just want to connect!",
-          style: Theme.of(context).textTheme.bodyLarge,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 32),
-        ElevatedButton(
-          onPressed: () {
-            _launchURL('mailto:your-email@example.com'); // Replace with your email
-          },
-          child: const Text('Say Hello'),
-        ),
-        const SizedBox(height: 24), // Spacing for social icons
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Tooltip(
-              message: 'GitHub',
-              child: IconButton(
-                icon: const FaIcon(FontAwesomeIcons.github),
-                iconSize: 32,
-                onPressed: () => _launchURL('https://github.com/akshat2474'),
-              ),
-            ),
-            const SizedBox(width: 24),
-            Tooltip(
-              message: 'LinkedIn',
-              child: IconButton(
-                icon: const FaIcon(FontAwesomeIcons.linkedin),
-                iconSize: 32,
-                onPressed: () =>
-                    _launchURL('https://www.linkedin.com/in/akshat-singh-48a03b312/'),
-              ),
-            ),
-          ],
-        ),
-      ],
+  Widget _buildListeningSection(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFF2A2A2A)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_currentSong.title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16)),
+              const SizedBox(height: 4),
+              Text(_currentSong.artist, style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+          TextButton(onPressed: _refreshSong, child: const Text("Refresh"))
+        ],
+      ),
     );
   }
 }

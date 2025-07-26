@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class Project {
   final String title;
   final String description;
@@ -5,7 +7,10 @@ class Project {
   final String techStack;
   final String implementationDetails;
   final String gaps;
-  final String? liveUrl; 
+  final String? liveUrl;
+  final IconData icon; 
+  final int year;
+  final List<String> tags;
 
   const Project({
     required this.title,
@@ -14,6 +19,9 @@ class Project {
     required this.techStack,
     required this.implementationDetails,
     required this.gaps,
+    required this.year,
+    required this.tags,
+    required this.icon, 
     this.liveUrl,
   });
 }

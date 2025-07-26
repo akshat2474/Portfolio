@@ -1,19 +1,23 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class BackgroundPainter extends CustomPainter {
+  final int starCount;
+  final Random random;
+
+  BackgroundPainter({this.starCount = 200}) : random = Random(12345);
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.08)
+      ..color = Colors.white.withValues(alpha: .5)
       ..style = PaintingStyle.fill;
-    
-    const double radius = 1.0;
-    const double spacing = 30.0;
 
-    for (double x = 0; x < size.width; x += spacing) {
-      for (double y = 0; y < size.height; y += spacing) {
-        canvas.drawCircle(Offset(x, y), radius, paint);
-      }
+    for (int i = 0; i < starCount; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 0.8;
+      canvas.drawCircle(Offset(x, y), radius, paint);
     }
   }
 
