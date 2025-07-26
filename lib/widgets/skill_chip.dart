@@ -1,23 +1,19 @@
+// lib/widgets/skill_chip.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SkillChip extends StatelessWidget {
   final String label;
-  final bool isSmall;
 
   const SkillChip({
     super.key, 
     required this.label,
-    this.isSmall = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 12 : 16, 
-        vertical: isSmall ? 6 : 8
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xFF222222),
         borderRadius: BorderRadius.circular(8),
@@ -27,7 +23,7 @@ class SkillChip extends StatelessWidget {
         label,
         style: GoogleFonts.jetBrainsMono(
           color: Colors.white.withOpacity(0.8),
-          fontSize: isSmall ? 12 : 14,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
       ),
