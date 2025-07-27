@@ -142,7 +142,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
           ),
           Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
+              constraints: const BoxConstraints(maxWidth: 960),
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
                 children: [
@@ -274,16 +274,19 @@ class _PortfolioPageState extends State<PortfolioPage> {
 
 
   Widget _buildProjectsSection() {
-    return SizedBox(
-      height: 200,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: projects.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 16),
-        itemBuilder: (context, index) {
-          return ProjectCard(project: projects[index]);
-        },
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 1.2,
       ),
+      itemCount: projects.length,
+      itemBuilder: (context, index) {
+        return ProjectCard(project: projects[index]);
+      },
     );
   }
 
@@ -315,8 +318,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
             ),
             child: SvgPicture.asset(
               entry.value,
-              height: 32,
-              width: 32,
+              height: 48,
+              width: 48,
               colorFilter:
                   const ColorFilter.mode(Colors.white, BlendMode.srcIn),
             ),
