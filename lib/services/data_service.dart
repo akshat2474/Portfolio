@@ -1,4 +1,5 @@
 import '../models/project.dart';
+import '../widgets/technical_skills.dart'; // Import to get Skill class definition
 
 class DataService {
   static List<Project> getProjects() {
@@ -90,8 +91,25 @@ class DataService {
     ];
   }
 
-  static List<String> getTechnologies() {
-    return ['Flutter', 'Python', 'C++', 'Dart', 'PyTorch', 'Scikit-Learn', 'TensorFlow', 'Firebase', 'Git', 'Canva'];
+  static Map<String, List<Skill>> getCategorizedSkills() {
+    return {
+      'Languages': [
+        Skill(name: 'Dart', iconPath: 'assets/svg/dart.svg'),
+        Skill(name: 'Python', iconPath: 'assets/svg/python.svg'),
+        Skill(name: 'C++', iconPath: 'assets/svg/c++.svg'),
+      ],
+      'Frameworks & Libraries': [
+        Skill(name: 'Flutter', iconPath: 'assets/svg/flutter.svg'),
+        Skill(name: 'PyTorch', iconPath: 'assets/svg/pytorch.svg'),
+        Skill(name: 'TensorFlow', iconPath: 'assets/svg/tensorflow.svg'),
+        Skill(name: 'Scikit-Learn', iconPath: 'assets/svg/scikit-learn.svg'),
+      ],
+      'Tools & Platforms': [
+        Skill(name: 'Firebase', iconPath: 'assets/svg/firebase.svg'),
+        Skill(name: 'Git', iconPath: 'assets/svg/git.svg'),
+        Skill(name: 'Canva', iconPath: 'assets/svg/canva.svg'),
+      ],
+    };
   }
 
   static List<String> getFavoriteArtists() {

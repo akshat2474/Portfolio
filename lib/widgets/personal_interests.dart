@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../animations/fade_animation.dart';
 import '../services/data_service.dart';
 import '../theme/app_theme.dart';
@@ -10,7 +11,7 @@ class PersonalInterestsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final artists = DataService.getFavoriteArtists();
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 100),
       color: AppTheme.backgroundColor,
@@ -23,13 +24,27 @@ class PersonalInterestsSection extends StatelessWidget {
               child: _buildSectionHeader(),
             ),
             const SizedBox(height: 80),
-            FadeAnimation(
-              delay: const Duration(milliseconds: 400),
-              child: _buildInterestsCard(artists),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: FadeAnimation(
+                    delay: const Duration(milliseconds: 400),
+                    child: _buildInterestsCard(artists),
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: FadeAnimation(
+                    delay: const Duration(milliseconds: 600),
+                    child: _buildChessCard(),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 100),
             FadeAnimation(
-              delay: const Duration(milliseconds: 600),
+              delay: const Duration(milliseconds: 800),
               child: _buildFooter(),
             ),
           ],
@@ -94,7 +109,7 @@ class PersonalInterestsSection extends StatelessWidget {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
+              color: AppTheme.primaryColor.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -116,7 +131,7 @@ class PersonalInterestsSection extends StatelessWidget {
           Container(
             constraints: const BoxConstraints(maxWidth: 600),
             child: Text(
-              'Music fuels my creativity and keeps me inspired during long coding sessions. Here are some of my favorite artists that provide the perfect soundtrack to my development work.',
+              'Music fuels my creativity and keeps me inspired during long coding sessions. Here are some of my favorite artists.',
               style: GoogleFonts.inter(
                 fontSize: 16,
                 height: 1.6,
@@ -130,26 +145,119 @@ class PersonalInterestsSection extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             alignment: WrapAlignment.center,
-            children: artists.map((artist) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppTheme.primaryColor.withOpacity(0.2)),
-              ),
-              child: Text(
-                artist,
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.primaryColor,
-                ),
-              ),
-            )).toList(),
+            children: artists
+                .map((artist) => Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withValues(alpha:0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppTheme.primaryColor.withValues(alpha:0.2)),
+                      ),
+                      child: Text(
+                        artist,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ))
+                .toList(),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildChessCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.borderColor),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppTheme.accentGreen.withValues(alpha:0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(
+              Icons.grid_on,
+              color: AppTheme.accentGreen,
+              size: 40,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Chess Player',
+            style: GoogleFonts.inter(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Text(
+              'I enjoy playing chess in my free time. You can find me on Lichess and Chess.com.',
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                height: 1.6,
+                color: AppTheme.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildChessProfileButton('Lichess', 'akshat2474', 'https://lichess.org/@/akshat2474'),
+              const SizedBox(width: 16),
+              _buildChessProfileButton('Chess.com', 'akshat2474', 'https://www.chess.com/member/akshat2474'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChessProfileButton(String platform, String username, String url) {
+    return ElevatedButton(
+      onPressed: () => _launchUrl(url),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppTheme.accentGreen.withValues(alpha:0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: AppTheme.accentGreen.withValues(alpha:0.2)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      ),
+      child: Text(
+        '$platform: $username',
+        style: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppTheme.accentGreen,
+        ),
+      ),
+    );
+  }
+
+  void _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 
   Widget _buildFooter() {

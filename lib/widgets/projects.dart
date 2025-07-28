@@ -127,7 +127,7 @@ class ProjectsSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.05),
+              color: AppTheme.primaryColor.withValues(alpha:0.05),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
@@ -140,7 +140,7 @@ class ProjectsSection extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    color: AppTheme.primaryColor.withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
@@ -153,10 +153,10 @@ class ProjectsSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(project.name).withOpacity(0.1),
+                    color: _getStatusColor(project.name).withValues(alpha:0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: _getStatusColor(project.name).withOpacity(0.3),
+                      color: _getStatusColor(project.name).withValues(alpha:0.3),
                     ),
                   ),
                   child: Row(

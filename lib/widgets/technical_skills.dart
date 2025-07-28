@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../animations/fade_animation.dart';
-import '../animations/slide_animation.dart';
 import '../services/data_service.dart';
 import '../theme/app_theme.dart';
+
+class Skill {
+  final String name;
+  final String iconPath;
+
+  Skill({required this.name, required this.iconPath});
+}
 
 class TechnicalSkillsSection extends StatelessWidget {
   const TechnicalSkillsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final technologies = DataService.getTechnologies();
-    
+    final categorizedSkills = DataService.getCategorizedSkills();
+    final categories = categorizedSkills.keys.toList();
+
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 100),
-      color: AppTheme.backgroundColor,
+      color: AppTheme.backgroundColor, 
       child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 100),
         constraints: const BoxConstraints(maxWidth: 1200),
         margin: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -25,23 +32,44 @@ class TechnicalSkillsSection extends StatelessWidget {
               child: _buildSectionHeader(),
             ),
             const SizedBox(height: 80),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                crossAxisSpacing: 24,
-                mainAxisSpacing: 24,
-                childAspectRatio: 1,
+            FadeAnimation(
+              delay: const Duration(milliseconds: 200),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceColor.withValues(alpha:0.8),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppTheme.borderColor.withValues(alpha:0.3),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha:0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(categories.length, (index) {
+                    final category = categories[index];
+                    final skills = categorizedSkills[category]!;
+                    return Expanded(
+                      child: FadeAnimation(
+                        delay: Duration(milliseconds: 200 * (index + 1)),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            right: index < categories.length - 1 ? 40 : 0,
+                          ),
+                          child: _buildSkillColumn(category, skills, index),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
               ),
-              itemCount: technologies.length,
-              itemBuilder: (context, index) {
-                return SlideAnimation(
-                  delay: Duration(milliseconds: 100 * index),
-                  beginOffset: const Offset(0, 0.3),
-                  child: _buildSkillCard(technologies[index], index),
-                );
-              },
             ),
           ],
         ),
@@ -75,7 +103,7 @@ class TechnicalSkillsSection extends StatelessWidget {
           style: GoogleFonts.inter(
             fontSize: 48,
             fontWeight: FontWeight.bold,
-            color: AppTheme.textPrimary,
+            color: AppTheme.textPrimary, 
           ),
         ),
         const SizedBox(height: 16),
@@ -90,63 +118,109 @@ class TechnicalSkillsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSkillCard(String technology, int index) {
-    final colors = [
-      AppTheme.primaryColor,
-      AppTheme.accentBlue,
-      AppTheme.accentGreen,
-      AppTheme.accentRed,
-    ];
-    final color = colors[index % colors.length];
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.borderColor),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: _getSkillIcon(technology, color),
+  Widget _buildSkillColumn(String title, List<Skill> skills, int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: AppTheme.primaryColor.withValues(alpha:0.3),
+                width: 2,
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            technology,
+          child: Text(
+            title,
             style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimary, 
             ),
-            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 24),
+        ...skills.map((skill) => _buildSkillItem(skill)),
+      ],
     );
   }
 
-  Widget _getSkillIcon(String technology, Color color) {
-    final iconPath = 'assets/svg/${technology.toLowerCase()}.svg';
-    
-    return SvgPicture.asset(
-      iconPath,
-      width: 24,
-      height: 24,
-      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-      placeholderBuilder: (context) => Icon(
-        Icons.code_rounded,
-        size: 24,
-        color: color,
+  Color _getSkillColor(String skillName) {
+    switch (skillName.toLowerCase()) {
+      case 'flutter':
+      case 'dart':
+        return Colors.lightBlue[400]!;
+      case 'python':
+        return Colors.yellow[700]!;
+      case 'c++':
+        return Colors.indigo[400]!;
+      case 'pytorch':
+      case 'tensorflow':
+        return Colors.orange[600]!;
+      case 'scikit-learn':
+        return Colors.teal[300]!;
+      case 'firebase':
+        return Colors.amber[500]!;
+      case 'git':
+        return Colors.red[600]!;
+      case 'canva':
+        return Colors.purpleAccent[100]!;
+      default:
+        return AppTheme.primaryColor;
+    }
+  }
+
+  Widget _buildSkillItem(Skill skill) {
+    final color = _getSkillColor(skill.name);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppTheme.backgroundColor.withValues(alpha: .5),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppTheme.borderColor.withValues(alpha:0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha:0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  skill.iconPath,
+                  width: 18,
+                  height: 18,
+                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                  placeholderBuilder: (context) => Icon(
+                    Icons.code_rounded,
+                    size: 18,
+                    color: color,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                skill.name,
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.textSecondary, 
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
