@@ -2,14 +2,17 @@ import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_theme.dart';
-import 'widgets/about_me.dart' ;
+import 'widgets/about_me.dart' hide AppTheme;
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
+import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
+  print("⏳ Loading dotenv...");
   await dotenv.load(fileName: "dotenv");
+  print("✅ dotenv loaded!");
   runApp(const PortfolioApp());
 }
 
@@ -99,7 +102,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               decoration: BoxDecoration(
                 // Using a solid color with opacity is much more performant than a blur.
                 color: _isScrolled
-                    ? AppTheme.backgroundColor.withValues(alpha:.85)
+                    ? AppTheme.backgroundColor.withOpacity(0.85)
                     : Colors.transparent,
                 border: Border(
                   bottom: BorderSide(

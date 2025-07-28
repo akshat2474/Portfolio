@@ -110,120 +110,47 @@ class ProjectsSection extends StatelessWidget {
   }
 }
 
-class _ProjectCard extends StatefulWidget {
+class _ProjectCard extends StatelessWidget {
   final Project project;
 
   const _ProjectCard({required this.project});
 
   @override
-  __ProjectCardState createState() => __ProjectCardState();
-}
-
-class __ProjectCardState extends State<_ProjectCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _glowAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // PERFORMANCE FIX: Converted from StatefulWidget to StatelessWidget and removed all hover animations.
     return MouseRegion(
-      onEnter: (_) {
-        _animationController.forward();
-      },
-      onExit: (_) {
-        _animationController.reverse();
-      },
       cursor: SystemMouseCursors.click,
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: _getStatusColor(widget.project.name)
-                        .withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
-                    blurRadius: 20 + (_glowAnimation.value * 10),
-                    offset: const Offset(0, 10),
-                    spreadRadius: _glowAnimation.value * 2,
-                  ),
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha:0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      _getStatusColor(widget.project.name).withValues(alpha:0.05),
-                      AppTheme.surfaceColor,
-                      AppTheme.surfaceColor,
-                    ],
-                    stops: const [0.0, 0.3, 1.0],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: _getStatusColor(widget.project.name)
-                        .withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
-                    width: 1 + (_glowAnimation.value * 0.5),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: _getStatusColor(project.name).withOpacity(0.2),
+            width: 1.5,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCardHeader(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildCardHeader(),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildCardContent(),
-                              const Spacer(),
-                              _buildCardFooter(),
-                            ],
-                          ),
-                        ),
-                      ),
+                      _buildCardContent(),
+                      const Spacer(),
+                      _buildCardFooter(),
                     ],
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -232,14 +159,7 @@ class __ProjectCardState extends State<_ProjectCard>
     return Container(
       height: 120,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            _getStatusColor(widget.project.name).withValues(alpha:0.2),
-            _getStatusColor(widget.project.name).withValues(alpha:0.05),
-          ],
-        ),
+        color: _getStatusColor(project.name).withOpacity(0.1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -251,19 +171,12 @@ class __ProjectCardState extends State<_ProjectCard>
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: _getStatusColor(widget.project.name).withValues(alpha:0.2),
+                color: _getStatusColor(project.name).withOpacity(0.2),
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: _getStatusColor(widget.project.name).withValues(alpha:0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
               ),
               child: Icon(
-                _getProjectIcon(widget.project.name),
-                color: _getStatusColor(widget.project.name),
+                _getProjectIcon(project.name),
+                color: _getStatusColor(project.name),
                 size: 32,
               ),
             ),
@@ -275,20 +188,13 @@ class __ProjectCardState extends State<_ProjectCard>
   }
 
   Widget _buildCategoryTag() {
-    final color = _getStatusColor(widget.project.name);
+    final color = _getStatusColor(project.name);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.9),
+        color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha:0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -303,7 +209,7 @@ class __ProjectCardState extends State<_ProjectCard>
           ),
           const SizedBox(width: 6),
           Text(
-            _getProjectCategory(widget.project.name),
+            _getProjectCategory(project.name),
             style: GoogleFonts.inter(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -321,7 +227,7 @@ class __ProjectCardState extends State<_ProjectCard>
       children: [
         const SizedBox(height: 20),
         Text(
-          widget.project.name,
+          project.name,
           style: GoogleFonts.inter(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -332,7 +238,7 @@ class __ProjectCardState extends State<_ProjectCard>
         ),
         const SizedBox(height: 12),
         Text(
-          widget.project.overview,
+          project.overview,
           style: GoogleFonts.inter(
             fontSize: 15,
             height: 1.6,
@@ -345,19 +251,19 @@ class __ProjectCardState extends State<_ProjectCard>
         Wrap(
           spacing: 6,
           runSpacing: 6,
-          children: widget.project.technologies.take(3).map((tech) => Container(
+          children: project.technologies.take(3).map((tech) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(widget.project.name).withValues(alpha: .1),
+              color: _getStatusColor(project.name).withOpacity(.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getStatusColor(widget.project.name).withValues(alpha:0.2),
+                color: _getStatusColor(project.name).withOpacity(0.2),
               ),
             ),
             child: Text(
               tech,
               style: GoogleFonts.inter(
-                color: _getStatusColor(widget.project.name),
+                color: _getStatusColor(project.name),
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
               ),
@@ -374,23 +280,23 @@ class __ProjectCardState extends State<_ProjectCard>
         const SizedBox(height: 20),
         Row(
           children: [
-            if (widget.project.liveUrl != null) ...[
+            if (project.liveUrl != null) ...[
               Expanded(
                 child: _buildActionButton(
                   'Live Demo',
                   Icons.launch_rounded,
-                  () => _launchUrl(widget.project.liveUrl!),
+                  () => _launchUrl(project.liveUrl!),
                   true,
                 ),
               ),
-              if (widget.project.githubUrl != null) const SizedBox(width: 12),
+              if (project.githubUrl != null) const SizedBox(width: 12),
             ],
-            if (widget.project.githubUrl != null)
+            if (project.githubUrl != null)
               Expanded(
                 child: _buildActionButton(
                   'View Code',
                   Icons.code_rounded,
-                  () => _launchUrl(widget.project.githubUrl!),
+                  () => _launchUrl(project.githubUrl!),
                   false,
                 ),
               ),
@@ -401,30 +307,14 @@ class __ProjectCardState extends State<_ProjectCard>
   }
 
   Widget _buildActionButton(String text, IconData icon, VoidCallback onPressed, bool isPrimary) {
-    final color = _getStatusColor(widget.project.name);
+    final color = _getStatusColor(project.name);
     
     return Container(
       height: 44,
       decoration: BoxDecoration(
-        gradient: isPrimary
-            ? LinearGradient(
-                colors: [color, color.withValues(alpha:0.8)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : null,
-        color: isPrimary ? null : Colors.transparent,
+        color: isPrimary ? color : Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         border: isPrimary ? null : Border.all(color: AppTheme.borderColor),
-        boxShadow: isPrimary
-            ? [
-                BoxShadow(
-                  color: color.withValues(alpha:0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
       ),
       child: Material(
         color: Colors.transparent,

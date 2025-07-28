@@ -35,39 +35,34 @@ class TechnicalSkillsSection extends StatelessWidget {
             const SizedBox(height: 80),
             FadeAnimation(
               delay: const Duration(milliseconds: 200),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceColor.withValues(alpha:0.5),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: AppTheme.borderColor.withValues(alpha:0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(categories.length, (index) {
-                        final category = categories[index];
-                        final skills = categorizedSkills[category]!;
-                        return Expanded(
-                          child: FadeAnimation(
-                            delay: Duration(milliseconds: 200 * (index + 1)),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: index < categories.length - 1 ? 40 : 0,
-                              ),
-                              child: _buildSkillColumn(category, skills, index),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
+              // PERFORMANCE FIX: Replaced the expensive BackdropFilter with a simple Container.
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceColor.withOpacity(0.5), // Simple transparency is much faster.
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: AppTheme.borderColor.withOpacity(0.3),
+                    width: 1,
                   ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(categories.length, (index) {
+                    final category = categories[index];
+                    final skills = categorizedSkills[category]!;
+                    return Expanded(
+                      child: FadeAnimation(
+                        delay: Duration(milliseconds: 200 * (index + 1)),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            right: index < categories.length - 1 ? 40 : 0,
+                          ),
+                          child: _buildSkillColumn(category, skills, index),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ),
             ),
@@ -127,7 +122,7 @@ class TechnicalSkillsSection extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: AppTheme.primaryColor.withValues(alpha:0.3),
+                color: AppTheme.primaryColor.withOpacity(0.3),
                 width: 2,
               ),
             ),
@@ -179,10 +174,10 @@ class TechnicalSkillsSection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundColor.withValues(alpha:.5),
+          color: AppTheme.backgroundColor.withOpacity(.5),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.borderColor.withValues(alpha:0.2),
+            color: AppTheme.borderColor.withOpacity(0.2),
           ),
         ),
         child: Row(
@@ -191,7 +186,7 @@ class TechnicalSkillsSection extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: color.withValues(alpha:0.2),
+                color: color.withOpacity(0.2),
                 shape: BoxShape.circle,
               ),
               child: Center(
