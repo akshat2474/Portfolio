@@ -34,11 +34,10 @@ class TechnicalSkillsSection extends StatelessWidget {
             const SizedBox(height: 80),
             FadeAnimation(
               delay: const Duration(milliseconds: 200),
-              // PERFORMANCE FIX: Replaced the expensive BackdropFilter with a simple Container.
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor.withValues(alpha:0.5), // Simple transparency is much faster.
+                  color: AppTheme.surfaceColor.withValues(alpha:0.5),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: AppTheme.borderColor.withValues(alpha:0.3),

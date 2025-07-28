@@ -44,7 +44,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _interestsKey = GlobalKey();
 
-  // State to track scroll position for dynamic app bar styling
   bool _isScrolled = false;
 
   @override
@@ -102,7 +101,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
             flexibleSpace: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               decoration: BoxDecoration(
-                // Using a solid color with opacity is much more performant than a blur.
                 color: _isScrolled
                     ? AppTheme.backgroundColor.withValues(alpha: .85)
                     : Colors.transparent,

@@ -15,15 +15,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../theme/app_theme.dart' as AppTheme;
+import 'particle_background.dart';
 
-// --- DATA CLASS ---
 class CodeLanguage {
   final String name;
   final Color iconColor;
   final IconData icon;
   final String template;
   final int judgeId;
-  final dynamic languageMode; // For syntax highlighting
+  final dynamic languageMode;
 
   CodeLanguage({
     required this.name,
@@ -35,7 +35,6 @@ class CodeLanguage {
   });
 }
 
-// --- MAIN WIDGET: ABOUT ME SECTION ---
 class AboutMeSection extends StatelessWidget {
   final VoidCallback onViewWorkPressed;
 
@@ -49,7 +48,7 @@ class AboutMeSection extends StatelessWidget {
       color: AppTheme.AppTheme.backgroundColor,
       child: Stack(
         children: [
-          _buildGridPattern(),
+          const Positioned.fill(child: ParticleBackground()),
           Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 1200),
@@ -153,14 +152,6 @@ class AboutMeSection extends StatelessWidget {
     );
   }
 
-  Widget _buildGridPattern() {
-    return Positioned.fill(
-      child: CustomPaint(
-        painter: GridPatternPainter(),
-      ),
-    );
-  }
-
   Widget _buildGreeting() {
     return Text(
       'Hello, I\'m',
@@ -231,6 +222,11 @@ class AboutMeSection extends StatelessWidget {
       runSpacing: 16,
       alignment: WrapAlignment.center,
       children: [
+        _buildPrimaryButton(
+          'View My Work',
+          Icons.arrow_forward_rounded,
+          onViewWorkPressed,
+        ),
         _buildSecondaryButton(
           'GitHub',
           Icons.code_rounded,
@@ -245,6 +241,21 @@ class AboutMeSection extends StatelessWidget {
     );
   }
 
+  Widget _buildPrimaryButton(
+      String text, IconData icon, VoidCallback onPressed) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, color: Colors.white, size: 16),
+      label: Text(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppTheme.AppTheme.primaryColor,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
 
   Widget _buildSecondaryButton(
       String text, IconData icon, VoidCallback onPressed) {
@@ -274,28 +285,6 @@ class AboutMeSection extends StatelessWidget {
   }
 }
 
-// --- GRID PAINTER ---
-class GridPatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppTheme.AppTheme.borderColor.withValues(alpha: .3)
-      ..strokeWidth = 0.5;
-
-    const spacing = 50.0;
-    for (double x = 0; x < size.width; x += spacing) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-    for (double y = 0; y < size.height; y += spacing) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// --- ADVANCED CODE EDITOR WIDGET ---
 class AdvancedCodeEditor extends StatefulWidget {
   const AdvancedCodeEditor({super.key});
 
@@ -848,6 +837,20 @@ int main() {
                 alignment: WrapAlignment.end,
                 spacing: 8,
                 runSpacing: 4,
+                children: [
+                  if (_executionTime > 0)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(color: Colors.blue.shade700, borderRadius: BorderRadius.circular(3)),
+                      child: Text('⚡ ${_executionTime.toStringAsFixed(3)}s', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 10 : 9, color: Colors.white, fontWeight: FontWeight.w600)),
+                    ),
+                  if (_memoryUsed > 0)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(color: Colors.purple.shade700, borderRadius: BorderRadius.circular(3)),
+                      child: Text('🧠 ${_memoryUsed}KB', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 10 : 9, color: Colors.white, fontWeight: FontWeight.w600)),
+                    ),
+                ],
               ),
             ),
           if ((_output.isNotEmpty || _error.isNotEmpty) && !_isRunning) ...[
@@ -941,7 +944,6 @@ int main() {
   }
 }
 
-// --- FADE ANIMATION ---
 class FadeAnimation extends StatefulWidget {
   final Duration delay;
   final Widget child;
@@ -976,7 +978,6 @@ class _FadeAnimationState extends State<FadeAnimation> with SingleTickerProvider
   }
 }
 
-// --- ISOLATED WIDGET FOR THE CODE EDITOR ---
 class CodeEditorField extends StatefulWidget {
   final bool isMaximized;
   final FocusNode focusNode;

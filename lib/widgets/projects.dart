@@ -5,6 +5,7 @@ import '../animations/fade_animation.dart';
 import '../models/project.dart';
 import '../services/data_service.dart';
 import '../theme/app_theme.dart';
+import 'particle_background.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
@@ -14,20 +15,27 @@ class ProjectsSection extends StatelessWidget {
     final projects = DataService.getProjects();
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 100),
       color: AppTheme.backgroundColor,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1400),
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            FadeAnimation(
-              child: _buildSectionHeader(),
+      child: Stack(
+        children: [
+          const Positioned.fill(child: ParticleBackground()),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 100),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  FadeAnimation(
+                    child: _buildSectionHeader(),
+                  ),
+                  const SizedBox(height: 80),
+                  _buildProjectsGrid(projects),
+                ],
+              ),
             ),
-            const SizedBox(height: 80),
-            _buildProjectsGrid(projects),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -76,9 +84,8 @@ class ProjectsSection extends StatelessWidget {
   Widget _buildProjectsGrid(List<Project> projects) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Determine grid layout based on screen size
         int crossAxisCount = 1;
-        double childAspectRatio = 1.4; // Portrait-like ratio for cards
+        double childAspectRatio = 1.4; 
         
         if (constraints.maxWidth > 1200) {
           crossAxisCount = 3;
@@ -117,7 +124,6 @@ class _ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // PERFORMANCE FIX: Converted from StatefulWidget to StatelessWidget and removed all hover animations.
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Container(

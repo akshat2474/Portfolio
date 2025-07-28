@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:akshat_portfolio/widgets/particle_background.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../main.dart';
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
     )..forward();
 
     _textController = AnimationController(
-      duration: const Duration(milliseconds: 150), // ⚡ Increased from 250ms for smoothness
+      duration: const Duration(milliseconds: 150), 
       vsync: this,
     );
 
@@ -55,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _startTextAnimation() {
     _textController.forward().then((_) {
-      Timer(const Duration(milliseconds: 120), () { // ⚡ Increased from 5ms to 120ms for better visibility
+      Timer(const Duration(milliseconds: 120), () {
         if (mounted) {
           _textController.reverse().then((_) {
             if (mounted) {
@@ -84,18 +85,18 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: AppTheme.backgroundColor,
       body: Stack(
         children: [
-          // Main content - centered
+          const Positioned.fill(child: ParticleBackground()),
           Center(
             child: Container(
-              height: 100, // Fixed height to prevent layout shifts
+              height: 100, 
               alignment: Alignment.center,
               child: AnimatedBuilder(
                 animation: _textController,
                 builder: (context, child) {
                   return Opacity(
-                    opacity: Curves.easeInOut.transform(_textController.value), // ⚡ Added smooth easing curve
+                    opacity: Curves.easeInOut.transform(_textController.value), 
                     child: Transform.translate(
-                      offset: Offset(0, Curves.easeOutBack.transform(1 - _textController.value) * 15), // ⚡ Reduced offset and added elastic curve
+                      offset: Offset(0, Curves.easeOutBack.transform(1 - _textController.value) * 15), 
                       child: Text(
                         greetings[_currentIndex],
                         style: GoogleFonts.inter(
@@ -111,8 +112,6 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
-
-          // Loading bar at bottom
           Positioned(
             left: 0,
             right: 0,
@@ -121,7 +120,6 @@ class _SplashScreenState extends State<SplashScreen>
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 children: [
-                  // Progress text
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -137,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen>
                         animation: _progressController,
                         builder: (context, child) {
                           return Text(
-                            '${(Curves.easeInOut.transform(_progressController.value) * 100).toInt()}%', // ⚡ Added smooth curve to percentage
+                            '${(Curves.easeInOut.transform(_progressController.value) * 100).toInt()}%', 
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               color: AppTheme.textSecondary,
@@ -151,11 +149,10 @@ class _SplashScreenState extends State<SplashScreen>
 
                   const SizedBox(height: 8),
 
-                  // Progress bar
                   Container(
                     height: 1,
                     decoration: BoxDecoration(
-                      color: AppTheme.textSecondary.withValues(alpha:0.2),
+                      color: AppTheme.textSecondary.withValues(alpha: .2),
                       borderRadius: BorderRadius.circular(0.5),
                     ),
                     child: AnimatedBuilder(
@@ -163,7 +160,7 @@ class _SplashScreenState extends State<SplashScreen>
                       builder: (context, child) {
                         return FractionallySizedBox(
                           alignment: Alignment.centerLeft,
-                          widthFactor: Curves.easeInOut.transform(_progressController.value), // ⚡ Added smooth curve to progress bar
+                          widthFactor: Curves.easeInOut.transform(_progressController.value),  
                           child: Container(
                             decoration: BoxDecoration(
                               color: AppTheme.primaryColor,

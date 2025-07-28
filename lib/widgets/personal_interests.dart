@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../animations/fade_animation.dart';
 import '../services/data_service.dart';
 import '../theme/app_theme.dart';
+import 'particle_background.dart';
 
 class PersonalInterestsSection extends StatelessWidget {
   const PersonalInterestsSection({super.key});
@@ -15,77 +16,79 @@ class PersonalInterestsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 100),
       color: AppTheme.backgroundColor,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1400),
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            FadeAnimation(
-              child: _buildSectionHeader(),
-            ),
-            const SizedBox(height: 80),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                // Responsive layout
-                if (constraints.maxWidth > 800) {
-                  return Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        children: [
+          const Positioned.fill(child: ParticleBackground()),
+          Container(
+            constraints: const BoxConstraints(maxWidth: 1400),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                FadeAnimation(
+                  child: _buildSectionHeader(),
+                ),
+                const SizedBox(height: 80),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth > 800) {
+                      return Column(
                         children: [
-                          Expanded(
-                            child: FadeAnimation(
-                              delay: const Duration(milliseconds: 200),
-                              child: _buildMusicCard(artists),
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: FadeAnimation(
+                                  delay: const Duration(milliseconds: 200),
+                                  child: _buildMusicCard(artists),
+                                ),
+                              ),
+                              const SizedBox(width: 32),
+                              Expanded(
+                                child: FadeAnimation(
+                                  delay: const Duration(milliseconds: 400),
+                                  child: _buildChessCard(),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 32),
-                          Expanded(
-                            child: FadeAnimation(
-                              delay: const Duration(milliseconds: 400),
-                              child: _buildChessCard(),
-                            ),
+                          const SizedBox(height: 80), 
+                          FadeAnimation(
+                            delay: const Duration(milliseconds: 600),
+                            child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 80),
-                      FadeAnimation(
-                        delay: const Duration(milliseconds: 600),
-                        child: _buildContactButton('akshatsingh2474@gmail.com',
-                            'mailto:akshatsingh2474@gmail.com'),
-                      ),
-                    ],
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      FadeAnimation(
-                        delay: const Duration(milliseconds: 200),
-                        child: _buildMusicCard(artists),
-                      ),
-                      const SizedBox(height: 32),
-                      FadeAnimation(
-                        delay: const Duration(milliseconds: 400),
-                        child: _buildChessCard(),
-                      ),
-                      const SizedBox(height: 80),
-                      FadeAnimation(
-                        delay: const Duration(milliseconds: 600),
-                        child: _buildContactButton('akshatsingh2474@gmail.com',
-                            'mailto:akshatsingh2474@gmail.com'),
-                      ),
-                    ],
-                  );
-                }
-              },
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          FadeAnimation(
+                            delay: const Duration(milliseconds: 200),
+                            child: _buildMusicCard(artists),
+                          ),
+                          const SizedBox(height: 32),
+                          FadeAnimation(
+                            delay: const Duration(milliseconds: 400),
+                            child: _buildChessCard(),
+                          ),
+                          const SizedBox(height: 80),
+                          FadeAnimation(
+                            delay: const Duration(milliseconds: 600),
+                            child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 80), 
+                FadeAnimation(
+                  delay: const Duration(milliseconds: 600),
+                  child: _buildFooter(),
+                ),
+              ],
             ),
-            const SizedBox(height: 80),
-            FadeAnimation(
-              delay: const Duration(milliseconds: 600),
-              child: _buildFooter(),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -196,8 +199,7 @@ class PersonalInterestsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildChessProfileButton(
-      String platform, String username, String url) {
+  Widget _buildChessProfileButton(String platform, String username, String url) {
     return OutlinedButton(
       onPressed: () => _launchUrl(url),
       style: OutlinedButton.styleFrom(
@@ -221,7 +223,7 @@ class PersonalInterestsSection extends StatelessWidget {
       width: double.infinity,
       alignment: Alignment.center,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 210),
+        constraints: const BoxConstraints(maxWidth: 320),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -254,7 +256,7 @@ class PersonalInterestsSection extends StatelessWidget {
                 ],
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.values[2],
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     width: 48,
@@ -278,7 +280,7 @@ class PersonalInterestsSection extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Contact me',
+                        'Get in Touch',
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -375,7 +377,7 @@ class _SimpleInterestCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
+        color: AppTheme.surfaceColor.withValues(alpha:0.8),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppTheme.borderColor),
       ),
