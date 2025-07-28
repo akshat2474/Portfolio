@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:code_text_field/code_text_field.dart';
@@ -15,11 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-
-
-
-
+import '../theme/app_theme.dart' as AppTheme;
 
 // --- DATA CLASS ---
 class CodeLanguage {
@@ -42,7 +37,9 @@ class CodeLanguage {
 
 // --- MAIN WIDGET: ABOUT ME SECTION ---
 class AboutMeSection extends StatelessWidget {
-  const AboutMeSection({super.key});
+  final VoidCallback onViewWorkPressed;
+
+  const AboutMeSection({super.key, required this.onViewWorkPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +48,7 @@ class AboutMeSection extends StatelessWidget {
 
     return Container(
       height: isSmallScreen ? null : screenHeight,
-      color: AppTheme.backgroundColor,
+      color: AppTheme.AppTheme.backgroundColor,
       child: Stack(
         children: [
           _buildGridPattern(),
@@ -77,11 +74,11 @@ class AboutMeSection extends StatelessWidget {
           child: _buildIntroductionText(),
         ),
         const SizedBox(width: 48),
-        const Expanded(
+        Expanded(
           flex: 2,
           child: FadeAnimation(
-            delay: Duration(milliseconds: 1200),
-            child: AdvancedCodeEditor(),
+            delay: const Duration(milliseconds: 1200),
+            child: _buildCodeEditorWithLabel(),
           ),
         ),
       ],
@@ -95,10 +92,31 @@ class AboutMeSection extends StatelessWidget {
       children: [
         _buildIntroductionText(isCentered: true),
         const SizedBox(height: 48),
-        const FadeAnimation(
-          delay: Duration(milliseconds: 1200),
-          child: AdvancedCodeEditor(),
+        FadeAnimation(
+          delay: const Duration(milliseconds: 1200),
+          child: _buildCodeEditorWithLabel(isCentered: true),
         ),
+      ],
+    );
+  }
+
+  Widget _buildCodeEditorWithLabel({bool isCentered = false}) {
+    return Column(
+      crossAxisAlignment:
+          isCentered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
+          child: Text(
+            "         Try the live code editor below!",
+            style: GoogleFonts.firaCode(
+              fontSize: 14,
+              color: AppTheme.AppTheme.textSecondary.withValues(alpha:0.8),
+            ),
+          ),
+        ),
+        const AdvancedCodeEditor(),
       ],
     );
   }
@@ -150,7 +168,7 @@ class AboutMeSection extends StatelessWidget {
       'Hello, I\'m',
       style: GoogleFonts.inter(
         fontSize: 18,
-        color: AppTheme.textSecondary,
+        color: AppTheme.AppTheme.textSecondary,
         fontWeight: FontWeight.w400,
       ),
     );
@@ -162,7 +180,7 @@ class AboutMeSection extends StatelessWidget {
       style: GoogleFonts.inter(
         fontSize: 64,
         fontWeight: FontWeight.bold,
-        color: AppTheme.textPrimary,
+        color: AppTheme.AppTheme.textPrimary,
         height: 1.1,
       ),
       textAlign: TextAlign.center,
@@ -174,9 +192,9 @@ class AboutMeSection extends StatelessWidget {
       height: 50,
       child: AnimatedTextKit(
         animatedTexts: [
-          _typerText('Flutter Developer', AppTheme.primaryColor),
-          _typerText('Machine Learning', AppTheme.accentBlue),
-          _typerText('Tech Innovator', AppTheme.accentGreen),
+          _typerText('Flutter Developer', AppTheme.AppTheme.primaryColor),
+          _typerText('Machine Learning', AppTheme.AppTheme.accentBlue),
+          _typerText('Tech Innovator', AppTheme.AppTheme.accentGreen),
         ],
         totalRepeatCount: 5,
         pause: const Duration(milliseconds: 2000),
@@ -205,7 +223,7 @@ class AboutMeSection extends StatelessWidget {
         style: GoogleFonts.inter(
           fontSize: 16,
           height: 1.6,
-          color: AppTheme.textSecondary,
+          color: AppTheme.AppTheme.textSecondary,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -218,6 +236,11 @@ class AboutMeSection extends StatelessWidget {
       runSpacing: 16,
       alignment: WrapAlignment.center,
       children: [
+        _buildPrimaryButton(
+          'View My Work',
+          Icons.arrow_forward_rounded,
+          onViewWorkPressed,
+        ),
         _buildSecondaryButton(
           'GitHub',
           Icons.code_rounded,
@@ -232,16 +255,31 @@ class AboutMeSection extends StatelessWidget {
     );
   }
 
+  Widget _buildPrimaryButton(
+      String text, IconData icon, VoidCallback onPressed) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, color: Colors.white, size: 16),
+      label: Text(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppTheme.AppTheme.primaryColor,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    );
+  }
 
   Widget _buildSecondaryButton(
       String text, IconData icon, VoidCallback onPressed) {
     return OutlinedButton.icon(
       onPressed: onPressed,
-      icon: Icon(icon, color: AppTheme.textPrimary, size: 16),
+      icon: Icon(icon, color: AppTheme.AppTheme.textPrimary, size: 16),
       label: Text(text),
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppTheme.textPrimary,
-        side: BorderSide(color: AppTheme.borderColor),
+        foregroundColor: AppTheme.AppTheme.textPrimary,
+        side: BorderSide(color: AppTheme.AppTheme.borderColor),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -266,7 +304,7 @@ class GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.borderColor.withValues(alpha:0.3)
+      ..color = AppTheme.AppTheme.borderColor.withValues(alpha:0.3)
       ..strokeWidth = 0.5;
 
     const spacing = 50.0;
@@ -293,7 +331,6 @@ class AdvancedCodeEditor extends StatefulWidget {
 class _AdvancedCodeEditorState extends State<AdvancedCodeEditor>
     with TickerProviderStateMixin {
   static final String _rapidApiKey = dotenv.env['API_URL'] ?? '';
-  late AnimationController _floatController;
   late final CodeController _codeController;
   late TextEditingController _inputController;
   late FocusNode _codeEditorFocusNode;
@@ -308,8 +345,8 @@ class _AdvancedCodeEditorState extends State<AdvancedCodeEditor>
       icon: Icons.code,
       judgeId: 71,
       languageMode: python,
-      template: 
-"""#Click the Input button before running.
+      template: """#Click the Input button 
+#before running the code
 def greet(name):
     print(f"Hello, {name}!")
 
@@ -368,10 +405,6 @@ int main() {
   void initState() {
     super.initState();
     _selectedLanguage = _languages.first;
-    _floatController = AnimationController(
-      duration: const Duration(seconds: 4),
-      vsync: this,
-    )..repeat();
     _codeController = CodeController(
       text: _selectedLanguage.template,
       language: _selectedLanguage.languageMode,
@@ -385,7 +418,6 @@ int main() {
 
   @override
   void dispose() {
-    _floatController.dispose();
     _codeController.removeListener(_updateCursorPosition);
     _codeController.dispose();
     _inputController.dispose();
@@ -411,7 +443,6 @@ int main() {
   }
 
   void _updateCursorPosition() {
-    // if (_codeController.disposed) return;
     final selection = _codeController.selection;
     if (selection.baseOffset >= 0) {
       final lines = _codeController.text.substring(0, selection.baseOffset).split('\n');
@@ -556,7 +587,6 @@ int main() {
   void _showInputModal(BuildContext context) {
     showDialog(
       context: context,
-      // FIX: Tell showDialog to use the nearest Navigator, not the root one.
       useRootNavigator: false,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E1E),
@@ -601,26 +631,19 @@ int main() {
   Widget build(BuildContext context) {
     return Offstage(
       offstage: _isMaximized,
-      child: AnimatedBuilder(
-        animation: _floatController,
-        builder: (context, child) {
-          final floatOffset = sin(_floatController.value * 2 * pi) * 8;
-          return Transform.translate(offset: Offset(0, floatOffset), child: child);
-        },
-        child: Container(
-          width: 520,
-          height: 480,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: const Color(0xFF1E1E1E),
-            border: Border.all(color: const Color(0xFF333333)),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha:0.8), blurRadius: 40, spreadRadius: 5, offset: const Offset(0, 10)),
-              BoxShadow(color: _selectedLanguage.iconColor.withValues(alpha:0.1), blurRadius: 60, spreadRadius: -5),
-            ],
-          ),
-          child: _buildEditorContent(context),
+      child: Container(
+        width: 520,
+        height: 480,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFF1E1E1E),
+          border: Border.all(color: const Color(0xFF333333)),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha:0.8), blurRadius: 40, spreadRadius: 5, offset: const Offset(0, 10)),
+            BoxShadow(color: _selectedLanguage.iconColor.withValues(alpha:0.1), blurRadius: 60, spreadRadius: -5),
+          ],
         ),
+        child: _buildEditorContent(context),
       ),
     );
   }
@@ -950,17 +973,6 @@ int main() {
       ),
     );
   }
-}
-
-// --- APP THEME ---
-class AppTheme {
-  static const Color backgroundColor = Color(0xFF0A0A0A);
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFAAAAAA);
-  static const Color primaryColor = Color(0xFF3273DC);
-  static const Color accentBlue = Color(0xFF32B9DC);
-  static const Color accentGreen = Color(0xFF23D160);
-  static const Color borderColor = Color(0xFF333333);
 }
 
 // --- FADE ANIMATION ---

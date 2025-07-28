@@ -2,11 +2,10 @@ import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_theme.dart';
-import 'widgets/about_me.dart' hide AppTheme;
+import 'widgets/about_me.dart' ;
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
-import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
@@ -90,67 +89,63 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         controller: _scrollController,
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.transparent, // Make app bar transparent
+            backgroundColor: Colors.transparent,
             elevation: 0,
             pinned: true,
             floating: true,
             toolbarHeight: 80,
-            flexibleSpace: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  decoration: BoxDecoration(
+            flexibleSpace: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                // Using a solid color with opacity is much more performant than a blur.
+                color: _isScrolled
+                    ? AppTheme.backgroundColor.withValues(alpha:.85)
+                    : Colors.transparent,
+                border: Border(
+                  bottom: BorderSide(
                     color: _isScrolled
-                        ? AppTheme.backgroundColor.withValues(alpha:0.7)
+                        ? AppTheme.borderColor
                         : Colors.transparent,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: _isScrolled
-                            ? AppTheme.borderColor
-                            : Colors.transparent,
-                        width: 1,
-                      ),
-                    ),
+                    width: 1,
                   ),
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 1200),
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
+              child: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Akshat Singh',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'Akshat Singh',
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: AppTheme.textPrimary,
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _HoverNavButton(
-                                  text: 'About',
-                                  onPressed: () => _scrollToSection(_aboutKey)),
-                              _HoverNavButton(
-                                  text: 'Skills',
-                                  onPressed: () =>
-                                      _scrollToSection(_skillsKey)),
-                              _HoverNavButton(
-                                  text: 'Projects',
-                                  onPressed: () =>
-                                      _scrollToSection(_projectsKey)),
-                              _HoverNavButton(
-                                  text: 'Interests',
-                                  onPressed: () =>
-                                      _scrollToSection(_interestsKey)),
-                            ],
-                          ),
+                          _HoverNavButton(
+                              text: 'About',
+                              onPressed: () => _scrollToSection(_aboutKey)),
+                          _HoverNavButton(
+                              text: 'Skills',
+                              onPressed: () =>
+                                  _scrollToSection(_skillsKey)),
+                          _HoverNavButton(
+                              text: 'Projects',
+                              onPressed: () =>
+                                  _scrollToSection(_projectsKey)),
+                          _HoverNavButton(
+                              text: 'Interests',
+                              onPressed: () =>
+                                  _scrollToSection(_interestsKey)),
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -159,7 +154,10 @@ class _PortfolioHomeState extends State<PortfolioHome> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              AboutMeSection(key: _aboutKey),
+              AboutMeSection(
+                key: _aboutKey,
+                onViewWorkPressed: () => _scrollToSection(_projectsKey),
+              ),
               TechnicalSkillsSection(key: _skillsKey),
               ProjectsSection(key: _projectsKey),
               PersonalInterestsSection(key: _interestsKey),
