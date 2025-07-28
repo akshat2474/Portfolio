@@ -225,7 +225,7 @@ class PersonalInterestsSection extends StatelessWidget {
       width: double.infinity,
       alignment: Alignment.center,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 320),
+        constraints: const BoxConstraints(maxWidth: 215),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
