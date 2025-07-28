@@ -1,25 +1,25 @@
-
 # Personal Portfolio Website
 
-This is a custom portfolio website built with Flutter, showcasing my skills, projects, and interests with a modern, interactive design.
+A custom-built portfolio website crafted with **Flutter Web**, designed to showcase my skills, projects, and interests through a modern, interactive user experience.
 
-**Live Demo**: *\[]*
+🔗 **[Live Demo](https://akshatsingh-portfolio.netlify.app/)**
 
 ---
 
-## Features
+## Key Features
 
 ### Interactive Code Editor
 
-* Animated hero section with a live code editor
-* Supports Python, C++, Java, and JavaScript
-* Displays output, errors, memory usage, and execution time
-* Supports stdin input and fullscreen mode
+* Animated hero section featuring a fully functional code editor
+* Supports multiple languages: Python, C++, Java, and JavaScript
+* Real-time output, error logs, memory usage, and execution time
+* Stdin input support and fullscreen mode for distraction-free coding
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-* Built with Flutter (Web)
-* Uses code execution API for backend logic
-* Fully responsive design with dark theme and smooth animations
+* **Frontend:** Flutter Web
+* **Backend:** Code execution handled via external API
+* **Design:** Responsive layout, dark mode, and smooth animations
+
