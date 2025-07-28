@@ -817,20 +817,6 @@ int main() {
                 alignment: WrapAlignment.end,
                 spacing: 8,
                 runSpacing: 4,
-                children: [
-                  if (_executionTime > 0)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(color: Colors.blue.shade700, borderRadius: BorderRadius.circular(3)),
-                      child: Text('⚡ ${_executionTime.toStringAsFixed(3)}s', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 10 : 9, color: Colors.white, fontWeight: FontWeight.w600)),
-                    ),
-                  if (_memoryUsed > 0)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(color: Colors.purple.shade700, borderRadius: BorderRadius.circular(3)),
-                      child: Text('🧠 ${_memoryUsed}KB', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 10 : 9, color: Colors.white, fontWeight: FontWeight.w600)),
-                    ),
-                ],
               ),
             ),
           if ((_output.isNotEmpty || _error.isNotEmpty) && !_isRunning) ...[

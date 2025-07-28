@@ -19,11 +19,10 @@ class ProjectsSection extends StatelessWidget {
       child: Stack(
         children: [
           const Positioned.fill(child: ParticleBackground()),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 100),
+          Center(
             child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 24),
               constraints: const BoxConstraints(maxWidth: 1400),
-              margin: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
                   FadeAnimation(
@@ -63,6 +62,7 @@ class ProjectsSection extends StatelessWidget {
         const SizedBox(height: 24),
         Text(
           'Featured Work',
+          textAlign: TextAlign.center,
           style: GoogleFonts.inter(
             fontSize: 48,
             fontWeight: FontWeight.bold,
@@ -72,6 +72,7 @@ class ProjectsSection extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'A collection of projects I\'ve worked on',
+          textAlign: TextAlign.center,
           style: GoogleFonts.inter(
             fontSize: 16,
             color: AppTheme.textSecondary,
@@ -84,23 +85,26 @@ class ProjectsSection extends StatelessWidget {
   Widget _buildProjectsGrid(List<Project> projects) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        // Determine the number of columns based on screen width
         int crossAxisCount = 1;
-        double childAspectRatio = 1.4; 
-        
         if (constraints.maxWidth > 1200) {
           crossAxisCount = 3;
-          childAspectRatio = 0.9;
         } else if (constraints.maxWidth > 800) {
           crossAxisCount = 2;
-          childAspectRatio = 1.0;
         }
+
+        // Calculate the width of each grid item
+        double itemWidth = (constraints.maxWidth - (crossAxisCount - 1) * 24) / crossAxisCount;
+        // Set a fixed height for the cards to maintain consistency
+        double itemHeight = 480; 
 
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            childAspectRatio: childAspectRatio,
+            // Calculate aspect ratio dynamically
+            childAspectRatio: itemWidth / itemHeight,
             crossAxisSpacing: 24,
             mainAxisSpacing: 24,
           ),
@@ -131,7 +135,7 @@ class _ProjectCard extends StatelessWidget {
           color: AppTheme.surfaceColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: _getStatusColor(project.name).withValues(alpha:0.2),
+            color: _getStatusColor(project.name).withOpacity(0.2),
             width: 1.5,
           ),
         ),
@@ -165,7 +169,7 @@ class _ProjectCard extends StatelessWidget {
     return Container(
       height: 120,
       decoration: BoxDecoration(
-        color: _getStatusColor(project.name).withValues(alpha:0.1),
+        color: _getStatusColor(project.name).withOpacity(0.1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -177,7 +181,7 @@ class _ProjectCard extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: _getStatusColor(project.name).withValues(alpha:0.2),
+                color: _getStatusColor(project.name).withOpacity(0.2),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
@@ -198,9 +202,9 @@ class _ProjectCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.9),
+        color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha:0.2)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -260,10 +264,10 @@ class _ProjectCard extends StatelessWidget {
           children: project.technologies.take(3).map((tech) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(project.name).withValues(alpha:.1),
+              color: _getStatusColor(project.name).withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getStatusColor(project.name).withValues(alpha:0.2),
+                color: _getStatusColor(project.name).withOpacity(0.2),
               ),
             ),
             child: Text(
@@ -352,6 +356,7 @@ class _ProjectCard extends StatelessWidget {
   }
 }
 
+// Helper functions to determine styling based on project name
 Color _getStatusColor(String projectName) {
   switch (projectName.toLowerCase()) {
     case 'carboneye':
@@ -409,9 +414,12 @@ IconData _getProjectIcon(String projectName) {
   }
 }
 
+// Helper function to launch a URL
 void _launchUrl(String url) async {
   final uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri);
+  } else {
+    debugPrint('Could not launch $url');
   }
 }

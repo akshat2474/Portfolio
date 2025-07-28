@@ -82,9 +82,17 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     }
   }
 
-  void _downloadResume() {
-    launchUrl(Uri.parse('assets/resume/Resume.pdf'));
+  // --- FINAL FIX: Use the correct asset path for web ---
+  void _downloadResume() async {
+    // This is the correct path that Flutter generates for web assets.
+    const url = 'assets/assets/resume/Resume.pdf'; 
+    final uri = Uri.parse(url);
+
+    if (!await launchUrl(uri)) {
+      debugPrint('Could not launch $url');
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +110,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               duration: const Duration(milliseconds: 300),
               decoration: BoxDecoration(
                 color: _isScrolled
-                    ? AppTheme.backgroundColor.withValues(alpha: .85)
+                    ? AppTheme.backgroundColor.withOpacity(.85)
                     : Colors.transparent,
                 border: Border(
                   bottom: BorderSide(
