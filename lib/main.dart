@@ -1,6 +1,7 @@
 import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'theme/app_theme.dart';
 import 'widgets/about_me.dart' hide AppTheme;
 import 'widgets/technical_skills.dart';
@@ -85,6 +86,10 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     }
   }
 
+  void _downloadResume() {
+    launchUrl(Uri.parse('assets/resume/Resume.pdf'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,20 +137,8 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           _HoverNavButton(
-                              text: 'About',
-                              onPressed: () => _scrollToSection(_aboutKey)),
-                          _HoverNavButton(
-                              text: 'Skills',
-                              onPressed: () =>
-                                  _scrollToSection(_skillsKey)),
-                          _HoverNavButton(
-                              text: 'Projects',
-                              onPressed: () =>
-                                  _scrollToSection(_projectsKey)),
-                          _HoverNavButton(
-                              text: 'Interests',
-                              onPressed: () =>
-                                  _scrollToSection(_interestsKey)),
+                              text: 'Resume',
+                              onPressed: _downloadResume),
                         ],
                       ),
                     ],
@@ -164,7 +157,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               TechnicalSkillsSection(key: _skillsKey),
               ProjectsSection(key: _projectsKey),
               PersonalInterestsSection(key: _interestsKey),
-              const SizedBox(height: 100),
             ]),
           ),
         ],

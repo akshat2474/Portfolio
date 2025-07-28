@@ -48,12 +48,12 @@ class PersonalInterestsSection extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 80), // Increased to match bottom spacing
+                      const SizedBox(height: 80),
                       FadeAnimation(
                         delay: const Duration(milliseconds: 600),
-                        child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
+                        child: _buildContactButton('akshatsingh2474@gmail.com',
+                            'mailto:akshatsingh2474@gmail.com'),
                       ),
-                      const SizedBox(height: 80), // Added equal spacing below
                     ],
                   );
                 } else {
@@ -68,17 +68,18 @@ class PersonalInterestsSection extends StatelessWidget {
                         delay: const Duration(milliseconds: 400),
                         child: _buildChessCard(),
                       ),
-                      const SizedBox(height: 80), // Increased to match bottom spacing
+                      const SizedBox(height: 80),
                       FadeAnimation(
                         delay: const Duration(milliseconds: 600),
-                        child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
+                        child: _buildContactButton('akshatsingh2474@gmail.com',
+                            'mailto:akshatsingh2474@gmail.com'),
                       ),
-                      const SizedBox(height: 80), // Added equal spacing below
                     ],
                   );
                 }
               },
             ),
+            const SizedBox(height: 80),
             FadeAnimation(
               delay: const Duration(milliseconds: 600),
               child: _buildFooter(),
@@ -131,22 +132,17 @@ class PersonalInterestsSection extends StatelessWidget {
   }
 
   Widget _buildMusicCard(List<String> artists) {
-    return _InterestCard(
+    return _SimpleInterestCard(
       color: AppTheme.primaryColor,
       icon: Icons.music_note_rounded,
       title: 'Music Enthusiast',
       description:
           'Music fuels my creativity and keeps me inspired during long coding sessions. Here are some of my favorite artists.',
-      child: Column(
-        children: [
-          const SizedBox(height: 24),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            alignment: WrapAlignment.center,
-            children: artists.map((artist) => _buildArtistTag(artist)).toList(),
-          ),
-        ],
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        alignment: WrapAlignment.center,
+        children: artists.map((artist) => _buildArtistTag(artist)).toList(),
       ),
     );
   }
@@ -155,21 +151,9 @@ class PersonalInterestsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppTheme.primaryColor.withAlpha(25),
-            AppTheme.primaryColor.withAlpha(12),
-          ],
-        ),
+        color: AppTheme.primaryColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.primaryColor.withAlpha(51)),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryColor.withAlpha(25),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppTheme.primaryColor.withOpacity(0.2)),
       ),
       child: Text(
         artist,
@@ -183,36 +167,29 @@ class PersonalInterestsSection extends StatelessWidget {
   }
 
   Widget _buildChessCard() {
-    return _InterestCard(
+    return _SimpleInterestCard(
       color: AppTheme.accentGreen,
       icon: Icons.games_rounded,
       title: 'Chess Player',
       description:
           'I enjoy playing chess in my free time. Strategic thinking and pattern recognition make it the perfect complement to programming.',
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: _buildChessProfileButton(
-                  'Lichess',
-                  'akshat2474',
-                  'https://lichess.org/@/akshat2474',
-                  Icons.psychology_rounded,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildChessProfileButton(
-                  'Chess.com',
-                  'akshat2474',
-                  'https://www.chess.com/member/akshat2474',
-                  Icons.sports_esports_rounded,
-                ),
-              ),
-            ],
+          Expanded(
+            child: _buildChessProfileButton(
+              'Lichess',
+              'akshat2474',
+              'https://lichess.org/@/akshat2474',
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _buildChessProfileButton(
+              'Chess.com',
+              'akshat2474',
+              'https://www.chess.com/member/akshat2474',
+            ),
           ),
         ],
       ),
@@ -220,53 +197,20 @@ class PersonalInterestsSection extends StatelessWidget {
   }
 
   Widget _buildChessProfileButton(
-      String platform, String username, String url, IconData icon) {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppTheme.accentGreen.withAlpha(25),
-            AppTheme.accentGreen.withAlpha(12),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentGreen.withAlpha(51)),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.accentGreen.withAlpha(25),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+      String platform, String username, String url) {
+    return OutlinedButton(
+      onPressed: () => _launchUrl(url),
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        side: BorderSide(color: AppTheme.accentGreen.withOpacity(0.3)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => _launchUrl(url),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  color: AppTheme.accentGreen,
-                  size: 20,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  platform,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.accentGreen,
-                  ),
-                ),
-              ],
-            ),
-          ),
+      child: Text(
+        platform,
+        style: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: AppTheme.accentGreen,
         ),
       ),
     );
@@ -277,14 +221,14 @@ class PersonalInterestsSection extends StatelessWidget {
       width: double.infinity,
       alignment: Alignment.center,
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 280),
+        constraints: const BoxConstraints(maxWidth: 210),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: () => _launchUrl(url),
             borderRadius: BorderRadius.circular(16),
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -297,55 +241,60 @@ class PersonalInterestsSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9CD3D9).withValues(alpha: .3),
+                    color: const Color(0xFF9CD3D9).withOpacity(0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                     spreadRadius: 0,
                   ),
                   BoxShadow(
-                    color: Colors.black.withValues(alpha:0.1),
+                    color: Colors.black.withOpacity(0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.values[2],
                 children: [
                   Container(
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha:0.3),
+                      color: Colors.white.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha:0.4),
+                        color: Colors.white.withOpacity(0.4),
                         width: 1,
                       ),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.mail_outline_rounded,
-                      color: const Color(0xFF2D6A75),
+                      color: Color(0xFF2D6A75),
                       size: 24,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Get in Touch',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF2D6A75),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Drop me a line',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF2D6A75).withValues(alpha:0.8),
-                    ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Contact me',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF2D6A75),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Drop me a line',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF2D6A75).withOpacity(0.8),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -367,16 +316,9 @@ class PersonalInterestsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppTheme.surfaceColor.withAlpha(128),
-            AppTheme.surfaceColor.withAlpha(51),
-          ],
-        ),
+        color: AppTheme.surfaceColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.borderColor.withAlpha(128)),
+        border: Border.all(color: AppTheme.borderColor),
       ),
       child: Column(
         children: [
@@ -413,14 +355,14 @@ class PersonalInterestsSection extends StatelessWidget {
   }
 }
 
-class _InterestCard extends StatefulWidget {
+class _SimpleInterestCard extends StatelessWidget {
   final Color color;
   final IconData icon;
   final String title;
   final String description;
   final Widget child;
 
-  const _InterestCard({
+  const _SimpleInterestCard({
     required this.color,
     required this.icon,
     required this.title,
@@ -429,168 +371,39 @@ class _InterestCard extends StatefulWidget {
   });
 
   @override
-  __InterestCardState createState() => __InterestCardState();
-}
-
-class __InterestCardState extends State<_InterestCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _glowAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        _animationController.forward();
-      },
-      onExit: (_) {
-        _animationController.reverse();
-      },
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.color.withAlpha(
-                        (25 + (_glowAnimation.value * 51)).toInt()),
-                    blurRadius: 20 + (_glowAnimation.value * 10),
-                    offset: const Offset(0, 10),
-                    spreadRadius: _glowAnimation.value * 2,
-                  ),
-                  BoxShadow(
-                    color: Colors.black.withAlpha(25),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      widget.color.withAlpha(12),
-                      AppTheme.surfaceColor,
-                      AppTheme.surfaceColor,
-                    ],
-                    stops: const [0.0, 0.3, 1.0],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: widget.color.withAlpha(
-                        (25 + (_glowAnimation.value * 51)).toInt()),
-                    width: 1 + (_glowAnimation.value * 0.5),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Column(
-                    children: [
-                      _buildCardHeader(),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 0, 40, 40),
-                        child: Column(
-                          children: [
-                            _buildCardContent(),
-                            widget.child,
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCardHeader() {
     return Container(
-      height: 140,
+      padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            widget.color.withAlpha(51),
-            widget.color.withAlpha(12),
-          ],
-        ),
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppTheme.borderColor),
       ),
-      child: Center(
-        child: Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            color: widget.color.withAlpha(51),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: widget.color.withAlpha(76),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: color, size: 32),
           ),
-          child: Icon(
-            widget.icon,
-            color: widget.color,
-            size: 40,
+          const SizedBox(height: 24),
+          Text(
+            title,
+            style: GoogleFonts.inter(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimary,
+            ),
+            textAlign: TextAlign.center,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCardContent() {
-    return Column(
-      children: [
-        const SizedBox(height: 32),
-        Text(
-          widget.title,
-          style: GoogleFonts.inter(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.textPrimary,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: Text(
-            widget.description,
+          const SizedBox(height: 16),
+          Text(
+            description,
             style: GoogleFonts.inter(
               fontSize: 16,
               height: 1.6,
@@ -598,8 +411,10 @@ class __InterestCardState extends State<_InterestCard>
             ),
             textAlign: TextAlign.center,
           ),
-        ),
-      ],
+          const SizedBox(height: 24),
+          child,
+        ],
+      ),
     );
   }
 }

@@ -73,17 +73,12 @@ class _FadeAnimationState extends State<FadeAnimation>
           _startAnimation();
         }
       },
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return FadeTransition(
-            opacity: _opacity,
-            child: SlideTransition(
-              position: _slideAnimation,
-              child: widget.child,
-            ),
-          );
-        },
+      child: FadeTransition(
+        opacity: _opacity,
+        child: SlideTransition(
+          position: _slideAnimation,
+          child: widget.child,
+        ),
       ),
     );
   }
