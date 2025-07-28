@@ -1,3 +1,4 @@
+import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_theme.dart';
@@ -21,7 +22,7 @@ class PortfolioApp extends StatelessWidget {
       theme: AppTheme.darkTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: const PortfolioHome(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -99,7 +100,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   duration: const Duration(milliseconds: 300),
                   decoration: BoxDecoration(
                     color: _isScrolled
-                        ? AppTheme.backgroundColor.withValues(alpha:0.7)
+                        ? AppTheme.backgroundColor.withOpacity(0.7)
                         : Colors.transparent,
                     border: Border(
                       bottom: BorderSide(
