@@ -5,6 +5,7 @@ import 'widgets/about_me.dart';
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
+import 'dart:ui';
 
 void main() {
   runApp(const PortfolioApp());
@@ -40,6 +41,34 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _interestsKey = GlobalKey();
 
+  // State to track scroll position for dynamic app bar styling
+  bool _isScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.offset > 50 && !_isScrolled) {
+      setState(() {
+        _isScrolled = true;
+      });
+    } else if (_scrollController.offset <= 50 && _isScrolled) {
+      setState(() {
+        _isScrolled = false;
+      });
+    }
+  }
+
   void _scrollToSection(GlobalKey key) {
     final context = key.currentContext;
     if (context != null) {
@@ -58,27 +87,72 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         controller: _scrollController,
         slivers: [
           SliverAppBar(
-            expandedHeight: 80,
-            floating: true,
-            pinned: true,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Colors.transparent, // Make app bar transparent
             elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'Akshat Singh',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+            pinned: true,
+            floating: true,
+            toolbarHeight: 80,
+            flexibleSpace: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  decoration: BoxDecoration(
+                    color: _isScrolled
+                        ? AppTheme.backgroundColor.withOpacity(0.7)
+                        : Colors.transparent,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: _isScrolled
+                            ? AppTheme.borderColor
+                            : Colors.transparent,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 1200),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Akshat Singh',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: AppTheme.textPrimary,
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _HoverNavButton(
+                                  text: 'About',
+                                  onPressed: () => _scrollToSection(_aboutKey)),
+                              _HoverNavButton(
+                                  text: 'Skills',
+                                  onPressed: () =>
+                                      _scrollToSection(_skillsKey)),
+                              _HoverNavButton(
+                                  text: 'Projects',
+                                  onPressed: () =>
+                                      _scrollToSection(_projectsKey)),
+                              _HoverNavButton(
+                                  text: 'Interests',
+                                  onPressed: () =>
+                                      _scrollToSection(_interestsKey)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-            actions: [
-              _buildNavButton('About', () => _scrollToSection(_aboutKey)),
-              _buildNavButton('Skills', () => _scrollToSection(_skillsKey)),
-              _buildNavButton('Projects', () => _scrollToSection(_projectsKey)),
-              _buildNavButton('Interests', () => _scrollToSection(_interestsKey)),
-              const SizedBox(width: 16),
-            ],
+            titleSpacing: 0,
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -93,17 +167,63 @@ class _PortfolioHomeState extends State<PortfolioHome> {
       ),
     );
   }
+}
 
-  Widget _buildNavButton(String text, VoidCallback onPressed) {
-    return TextButton(
-      onPressed: onPressed,
-      child: Text(
-        text,
-        style: GoogleFonts.poppins(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.w500,
+class _HoverNavButton extends StatefulWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const _HoverNavButton({required this.text, required this.onPressed});
+
+  @override
+  __HoverNavButtonState createState() => __HoverNavButtonState();
+}
+
+class __HoverNavButtonState extends State<_HoverNavButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hoveredColor = AppTheme.primaryColor;
+    final nonHoveredColor = AppTheme.textSecondary;
+
+    return MouseRegion(
+      onEnter: (_) => _onHover(true),
+      onExit: (_) => _onHover(false),
+      cursor: SystemMouseCursors.click,
+      child: InkWell(
+        onTap: widget.onPressed,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.text,
+                style: GoogleFonts.poppins(
+                  color: _isHovered ? hoveredColor : nonHoveredColor,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 4),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                height: 2,
+                width: _isHovered ? 20 : 0,
+                color: hoveredColor,
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _onHover(bool isHovered) {
+    setState(() {
+      _isHovered = isHovered;
+    });
   }
 }
