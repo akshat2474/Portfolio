@@ -125,7 +125,7 @@ class _ProjectCard extends StatelessWidget {
           color: AppTheme.surfaceColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: _getStatusColor(project.name).withOpacity(0.2),
+            color: _getStatusColor(project.name).withValues(alpha:0.2),
             width: 1.5,
           ),
         ),
@@ -159,7 +159,7 @@ class _ProjectCard extends StatelessWidget {
     return Container(
       height: 120,
       decoration: BoxDecoration(
-        color: _getStatusColor(project.name).withOpacity(0.1),
+        color: _getStatusColor(project.name).withValues(alpha:0.1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -171,7 +171,7 @@ class _ProjectCard extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: _getStatusColor(project.name).withOpacity(0.2),
+                color: _getStatusColor(project.name).withValues(alpha:0.2),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
@@ -192,9 +192,9 @@ class _ProjectCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha:0.9),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -254,10 +254,10 @@ class _ProjectCard extends StatelessWidget {
           children: project.technologies.take(3).map((tech) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(project.name).withOpacity(.1),
+              color: _getStatusColor(project.name).withValues(alpha:.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getStatusColor(project.name).withOpacity(0.2),
+                color: _getStatusColor(project.name).withValues(alpha:0.2),
               ),
             ),
             child: Text(

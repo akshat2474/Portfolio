@@ -110,7 +110,7 @@ class AboutMeSection extends StatelessWidget {
             "         Try the live code editor below!",
             style: GoogleFonts.firaCode(
               fontSize: 14,
-              color: AppTheme.AppTheme.textSecondary.withOpacity(0.8),
+              color: AppTheme.AppTheme.textSecondary.withValues(alpha:0.8),
             ),
           ),
         ),
@@ -231,11 +231,6 @@ class AboutMeSection extends StatelessWidget {
       runSpacing: 16,
       alignment: WrapAlignment.center,
       children: [
-        _buildPrimaryButton(
-          'View My Work',
-          Icons.arrow_forward_rounded,
-          onViewWorkPressed,
-        ),
         _buildSecondaryButton(
           'GitHub',
           Icons.code_rounded,
@@ -250,21 +245,6 @@ class AboutMeSection extends StatelessWidget {
     );
   }
 
-  Widget _buildPrimaryButton(
-      String text, IconData icon, VoidCallback onPressed) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, color: Colors.white, size: 16),
-      label: Text(text),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-    );
-  }
 
   Widget _buildSecondaryButton(
       String text, IconData icon, VoidCallback onPressed) {
@@ -299,7 +279,7 @@ class GridPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.AppTheme.borderColor.withOpacity(0.3)
+      ..color = AppTheme.AppTheme.borderColor.withValues(alpha: .3)
       ..strokeWidth = 0.5;
 
     const spacing = 50.0;
@@ -634,8 +614,8 @@ int main() {
           color: const Color(0xFF1E1E1E),
           border: Border.all(color: const Color(0xFF333333)),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.8), blurRadius: 40, spreadRadius: 5, offset: const Offset(0, 10)),
-            BoxShadow(color: _selectedLanguage.iconColor.withOpacity(0.1), blurRadius: 60, spreadRadius: -5),
+            BoxShadow(color: Colors.black.withValues(alpha:0.8), blurRadius: 40, spreadRadius: 5, offset: const Offset(0, 10)),
+            BoxShadow(color: _selectedLanguage.iconColor.withValues(alpha:0.1), blurRadius: 60, spreadRadius: -5),
           ],
         ),
         child: _buildEditorContent(context),
@@ -809,7 +789,7 @@ int main() {
             children: [
               Icon(Icons.code_rounded, size: _isMaximized ? 16 : 14, color: Colors.grey.shade400),
               const SizedBox(width: 8),
-              Text('Source Code', style: GoogleFonts.inter(fontSize: _isMaximized ? 13 : 11, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w600)),
+              Text('Source Code', style: GoogleFonts.inter(fontSize: _isMaximized ? 13 : 11, color: Colors.white.withValues(alpha:0.9), fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -858,7 +838,7 @@ int main() {
           const SizedBox(width: 8),
           Text(
             'Console Output',
-            style: GoogleFonts.inter(fontSize: _isMaximized ? 13 : 11, color: Colors.white.withOpacity(0.9), fontWeight: FontWeight.w600),
+            style: GoogleFonts.inter(fontSize: _isMaximized ? 13 : 11, color: Colors.white.withValues(alpha:0.9), fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
           ),
           const Spacer(),
@@ -891,7 +871,7 @@ int main() {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.red.shade900.withOpacity(0.3), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.red.shade600)),
+        decoration: BoxDecoration(color: Colors.red.shade900.withValues(alpha:0.3), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.red.shade600)),
         child: SelectableText(_error, style: GoogleFonts.firaCode(fontSize: _isMaximized ? 12 : 11, color: Colors.red.shade300, height: 1.6)),
       );
     }
@@ -899,7 +879,7 @@ int main() {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: Colors.green.shade900.withOpacity(0.2), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.green.shade700)),
+        decoration: BoxDecoration(color: Colors.green.shade900.withValues(alpha:0.2), borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.green.shade700)),
         child: SelectableText(_output, style: GoogleFonts.firaCode(fontSize: _isMaximized ? 12 : 11, color: Colors.green.shade300, height: 1.6)),
       );
     }
@@ -935,9 +915,9 @@ int main() {
           const SizedBox(width: 8),
           Text(_selectedLanguage.name, style: GoogleFonts.inter(fontSize: _isMaximized ? 12 : 10, color: Colors.white, fontWeight: FontWeight.w600)),
           const SizedBox(width: 16),
-          Icon(Icons.location_on, size: _isMaximized ? 11 : 9, color: Colors.white.withOpacity(0.7)),
+          Icon(Icons.location_on, size: _isMaximized ? 11 : 9, color: Colors.white.withValues(alpha:0.7)),
           const SizedBox(width: 4),
-          Text('Ln $_cursorLine, Col $_cursorColumn', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 11 : 9, color: Colors.white.withOpacity(0.9))),
+          Text('Ln $_cursorLine, Col $_cursorColumn', style: GoogleFonts.firaCode(fontSize: _isMaximized ? 11 : 9, color: Colors.white.withValues(alpha:0.9))),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),

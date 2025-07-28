@@ -151,9 +151,9 @@ class PersonalInterestsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor.withOpacity(0.1),
+        color: AppTheme.primaryColor.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.primaryColor.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.primaryColor.withValues(alpha:0.2)),
       ),
       child: Text(
         artist,
@@ -202,7 +202,7 @@ class PersonalInterestsSection extends StatelessWidget {
       onPressed: () => _launchUrl(url),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        side: BorderSide(color: AppTheme.accentGreen.withOpacity(0.3)),
+        side: BorderSide(color: AppTheme.accentGreen.withValues(alpha:0.3)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: Text(
@@ -241,13 +241,13 @@ class PersonalInterestsSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9CD3D9).withOpacity(0.3),
+                    color: const Color(0xFF9CD3D9).withValues(alpha:0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                     spreadRadius: 0,
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -260,10 +260,10 @@ class PersonalInterestsSection extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha:0.3),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.4),
+                        color: Colors.white.withValues(alpha:0.4),
                         width: 1,
                       ),
                     ),
@@ -291,7 +291,7 @@ class PersonalInterestsSection extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF2D6A75).withOpacity(0.8),
+                          color: const Color(0xFF2D6A75).withValues(alpha:0.8),
                         ),
                       ),
                     ],
@@ -386,7 +386,7 @@ class _SimpleInterestCard extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(icon, color: color, size: 32),
