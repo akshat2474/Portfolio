@@ -28,22 +28,32 @@ class PersonalInterestsSection extends StatelessWidget {
               builder: (context, constraints) {
                 // Responsive layout
                 if (constraints.maxWidth > 800) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
                     children: [
-                      Expanded(
-                        child: FadeAnimation(
-                          delay: const Duration(milliseconds: 200),
-                          child: _buildMusicCard(artists),
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: FadeAnimation(
+                              delay: const Duration(milliseconds: 200),
+                              child: _buildMusicCard(artists),
+                            ),
+                          ),
+                          const SizedBox(width: 32),
+                          Expanded(
+                            child: FadeAnimation(
+                              delay: const Duration(milliseconds: 400),
+                              child: _buildChessCard(),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 32),
-                      Expanded(
-                        child: FadeAnimation(
-                          delay: const Duration(milliseconds: 400),
-                          child: _buildChessCard(),
-                        ),
+                      const SizedBox(height: 80), // Increased to match bottom spacing
+                      FadeAnimation(
+                        delay: const Duration(milliseconds: 600),
+                        child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
                       ),
+                      const SizedBox(height: 80), // Added equal spacing below
                     ],
                   );
                 } else {
@@ -58,12 +68,17 @@ class PersonalInterestsSection extends StatelessWidget {
                         delay: const Duration(milliseconds: 400),
                         child: _buildChessCard(),
                       ),
+                      const SizedBox(height: 80), // Increased to match bottom spacing
+                      FadeAnimation(
+                        delay: const Duration(milliseconds: 600),
+                        child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
+                      ),
+                      const SizedBox(height: 80), // Added equal spacing below
                     ],
                   );
                 }
               },
             ),
-            const SizedBox(height: 100),
             FadeAnimation(
               delay: const Duration(milliseconds: 600),
               child: _buildFooter(),
@@ -120,7 +135,8 @@ class PersonalInterestsSection extends StatelessWidget {
       color: AppTheme.primaryColor,
       icon: Icons.music_note_rounded,
       title: 'Music Enthusiast',
-      description: 'Music fuels my creativity and keeps me inspired during long coding sessions. Here are some of my favorite artists.',
+      description:
+          'Music fuels my creativity and keeps me inspired during long coding sessions. Here are some of my favorite artists.',
       child: Column(
         children: [
           const SizedBox(height: 24),
@@ -141,15 +157,15 @@ class PersonalInterestsSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.primaryColor.withValues(alpha:0.1),
-            AppTheme.primaryColor.withValues(alpha:0.05),
+            AppTheme.primaryColor.withAlpha(25),
+            AppTheme.primaryColor.withAlpha(12),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.primaryColor.withValues(alpha:0.2)),
+        border: Border.all(color: AppTheme.primaryColor.withAlpha(51)),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withValues(alpha:0.1),
+            color: AppTheme.primaryColor.withAlpha(25),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -171,7 +187,8 @@ class PersonalInterestsSection extends StatelessWidget {
       color: AppTheme.accentGreen,
       icon: Icons.games_rounded,
       title: 'Chess Player',
-      description: 'I enjoy playing chess in my free time. Strategic thinking and pattern recognition make it the perfect complement to programming.',
+      description:
+          'I enjoy playing chess in my free time. Strategic thinking and pattern recognition make it the perfect complement to programming.',
       child: Column(
         children: [
           const SizedBox(height: 24),
@@ -202,21 +219,22 @@ class PersonalInterestsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildChessProfileButton(String platform, String username, String url, IconData icon) {
+  Widget _buildChessProfileButton(
+      String platform, String username, String url, IconData icon) {
     return Container(
       height: 56,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.accentGreen.withValues(alpha:0.1),
-            AppTheme.accentGreen.withValues(alpha:0.05),
+            AppTheme.accentGreen.withAlpha(25),
+            AppTheme.accentGreen.withAlpha(12),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentGreen.withValues(alpha:0.2)),
+        border: Border.all(color: AppTheme.accentGreen.withAlpha(51)),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.accentGreen.withValues(alpha:0.1),
+            color: AppTheme.accentGreen.withAlpha(25),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -254,6 +272,90 @@ class PersonalInterestsSection extends StatelessWidget {
     );
   }
 
+  Widget _buildContactButton(String email, String url) {
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.center,
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 280),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => _launchUrl(url),
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFF9CD3D9),
+                    const Color(0xFF7BC3D1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF9CD3D9).withValues(alpha: .3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                    spreadRadius: 0,
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha:0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha:0.3),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha:0.4),
+                        width: 1,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.mail_outline_rounded,
+                      color: const Color(0xFF2D6A75),
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Get in Touch',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF2D6A75),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Drop me a line',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF2D6A75).withValues(alpha:0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -269,12 +371,12 @@ class PersonalInterestsSection extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.surfaceColor.withValues(alpha:0.5),
-            AppTheme.surfaceColor.withValues(alpha:0.2),
+            AppTheme.surfaceColor.withAlpha(128),
+            AppTheme.surfaceColor.withAlpha(51),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha:0.5)),
+        border: Border.all(color: AppTheme.borderColor.withAlpha(128)),
       ),
       child: Column(
         children: [
@@ -376,13 +478,14 @@ class __InterestCardState extends State<_InterestCard>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: widget.color.withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
+                    color: widget.color.withAlpha(
+                        (25 + (_glowAnimation.value * 51)).toInt()),
                     blurRadius: 20 + (_glowAnimation.value * 10),
                     offset: const Offset(0, 10),
                     spreadRadius: _glowAnimation.value * 2,
                   ),
                   BoxShadow(
-                    color: Colors.black.withValues(alpha:0.1),
+                    color: Colors.black.withAlpha(25),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -394,7 +497,7 @@ class __InterestCardState extends State<_InterestCard>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      widget.color.withValues(alpha:0.05),
+                      widget.color.withAlpha(12),
                       AppTheme.surfaceColor,
                       AppTheme.surfaceColor,
                     ],
@@ -402,7 +505,8 @@ class __InterestCardState extends State<_InterestCard>
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: widget.color.withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
+                    color: widget.color.withAlpha(
+                        (25 + (_glowAnimation.value * 51)).toInt()),
                     width: 1 + (_glowAnimation.value * 0.5),
                   ),
                 ),
@@ -439,8 +543,8 @@ class __InterestCardState extends State<_InterestCard>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            widget.color.withValues(alpha:0.2),
-            widget.color.withValues(alpha:0.05),
+            widget.color.withAlpha(51),
+            widget.color.withAlpha(12),
           ],
         ),
       ),
@@ -449,11 +553,11 @@ class __InterestCardState extends State<_InterestCard>
           width: 80,
           height: 80,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha:0.2),
+            color: widget.color.withAlpha(51),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withValues(alpha:0.3),
+                color: widget.color.withAlpha(76),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),

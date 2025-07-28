@@ -10,9 +10,7 @@ import 'dart:ui';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  print("⏳ Loading .env...");
-  await dotenv.load(fileName: ".env");
-  print("✅ .env loaded!");
+  await dotenv.load(fileName: "dotenv");
   runApp(const PortfolioApp());
 }
 
@@ -104,7 +102,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   duration: const Duration(milliseconds: 300),
                   decoration: BoxDecoration(
                     color: _isScrolled
-                        ? AppTheme.backgroundColor.withOpacity(0.7)
+                        ? AppTheme.backgroundColor.withValues(alpha:0.7)
                         : Colors.transparent,
                     border: Border(
                       bottom: BorderSide(

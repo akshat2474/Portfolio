@@ -155,7 +155,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Container(
                     height: 1,
                     decoration: BoxDecoration(
-                      color: AppTheme.textSecondary.withOpacity(0.2),
+                      color: AppTheme.textSecondary.withValues(alpha:0.2),
                       borderRadius: BorderRadius.circular(0.5),
                     ),
                     child: AnimatedBuilder(
