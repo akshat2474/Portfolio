@@ -33,25 +33,27 @@ class PersonalInterestsSection extends StatelessWidget {
                     if (constraints.maxWidth > 800) {
                       return Column(
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: FadeAnimation(
-                                  delay: const Duration(milliseconds: 200),
-                                  child: _buildMusicCard(artists),
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: FadeAnimation(
+                                    delay: const Duration(milliseconds: 200),
+                                    child: _buildMusicCard(artists),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 32),
-                              Expanded(
-                                child: FadeAnimation(
-                                  delay: const Duration(milliseconds: 400),
-                                  child: _buildChessCard(),
+                                const SizedBox(width: 32),
+                                Expanded(
+                                  child: FadeAnimation(
+                                    delay: const Duration(milliseconds: 400),
+                                    child: _buildChessCard(),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 80), 
+                          const SizedBox(height: 80),
                           FadeAnimation(
                             delay: const Duration(milliseconds: 600),
                             child: _buildContactButton('akshatsingh2474@gmail.com', 'mailto:akshatsingh2474@gmail.com'),
@@ -80,7 +82,7 @@ class PersonalInterestsSection extends StatelessWidget {
                     }
                   },
                 ),
-                const SizedBox(height: 80), 
+                const SizedBox(height: 80),
                 FadeAnimation(
                   delay: const Duration(milliseconds: 600),
                   child: _buildFooter(),
@@ -413,7 +415,7 @@ class _SimpleInterestCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          const Spacer(),
           child,
         ],
       ),

@@ -222,11 +222,6 @@ class AboutMeSection extends StatelessWidget {
       runSpacing: 16,
       alignment: WrapAlignment.center,
       children: [
-        _buildPrimaryButton(
-          'View My Work',
-          Icons.arrow_forward_rounded,
-          onViewWorkPressed,
-        ),
         _buildSecondaryButton(
           'GitHub',
           Icons.code_rounded,
@@ -241,21 +236,6 @@ class AboutMeSection extends StatelessWidget {
     );
   }
 
-  Widget _buildPrimaryButton(
-      String text, IconData icon, VoidCallback onPressed) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, color: Colors.white, size: 16),
-      label: Text(text),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.AppTheme.primaryColor,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-    );
-  }
 
   Widget _buildSecondaryButton(
       String text, IconData icon, VoidCallback onPressed) {
