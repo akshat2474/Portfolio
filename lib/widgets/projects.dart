@@ -121,7 +121,6 @@ class _ProjectCard extends StatefulWidget {
 
 class __ProjectCardState extends State<_ProjectCard>
     with SingleTickerProviderStateMixin {
-  bool _isHovered = false;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _glowAnimation;
@@ -151,11 +150,9 @@ class __ProjectCardState extends State<_ProjectCard>
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) {
-        setState(() => _isHovered = true);
         _animationController.forward();
       },
       onExit: (_) {
-        setState(() => _isHovered = false);
         _animationController.reverse();
       },
       cursor: SystemMouseCursors.click,
@@ -170,13 +167,13 @@ class __ProjectCardState extends State<_ProjectCard>
                 boxShadow: [
                   BoxShadow(
                     color: _getStatusColor(widget.project.name)
-                        .withOpacity(0.1 + (_glowAnimation.value * 0.2)),
+                        .withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
                     blurRadius: 20 + (_glowAnimation.value * 10),
                     offset: const Offset(0, 10),
                     spreadRadius: _glowAnimation.value * 2,
                   ),
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -188,7 +185,7 @@ class __ProjectCardState extends State<_ProjectCard>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      _getStatusColor(widget.project.name).withOpacity(0.05),
+                      _getStatusColor(widget.project.name).withValues(alpha:0.05),
                       AppTheme.surfaceColor,
                       AppTheme.surfaceColor,
                     ],
@@ -197,7 +194,7 @@ class __ProjectCardState extends State<_ProjectCard>
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: _getStatusColor(widget.project.name)
-                        .withOpacity(0.1 + (_glowAnimation.value * 0.2)),
+                        .withValues(alpha:0.1 + (_glowAnimation.value * 0.2)),
                     width: 1 + (_glowAnimation.value * 0.5),
                   ),
                 ),
@@ -239,8 +236,8 @@ class __ProjectCardState extends State<_ProjectCard>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            _getStatusColor(widget.project.name).withOpacity(0.2),
-            _getStatusColor(widget.project.name).withOpacity(0.05),
+            _getStatusColor(widget.project.name).withValues(alpha:0.2),
+            _getStatusColor(widget.project.name).withValues(alpha:0.05),
           ],
         ),
       ),
@@ -254,11 +251,11 @@ class __ProjectCardState extends State<_ProjectCard>
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: _getStatusColor(widget.project.name).withOpacity(0.2),
+                color: _getStatusColor(widget.project.name).withValues(alpha:0.2),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: _getStatusColor(widget.project.name).withOpacity(0.3),
+                    color: _getStatusColor(widget.project.name).withValues(alpha:0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -282,12 +279,12 @@ class __ProjectCardState extends State<_ProjectCard>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.white.withValues(alpha:0.9),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -351,10 +348,10 @@ class __ProjectCardState extends State<_ProjectCard>
           children: widget.project.technologies.take(3).map((tech) => Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: _getStatusColor(widget.project.name).withOpacity(0.1),
+              color: _getStatusColor(widget.project.name).withValues(alpha: .1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getStatusColor(widget.project.name).withOpacity(0.2),
+                color: _getStatusColor(widget.project.name).withValues(alpha:0.2),
               ),
             ),
             child: Text(
@@ -411,7 +408,7 @@ class __ProjectCardState extends State<_ProjectCard>
       decoration: BoxDecoration(
         gradient: isPrimary
             ? LinearGradient(
-                colors: [color, color.withOpacity(0.8)],
+                colors: [color, color.withValues(alpha:0.8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -422,7 +419,7 @@ class __ProjectCardState extends State<_ProjectCard>
         boxShadow: isPrimary
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha:0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

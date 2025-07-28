@@ -99,7 +99,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   duration: const Duration(milliseconds: 300),
                   decoration: BoxDecoration(
                     color: _isScrolled
-                        ? AppTheme.backgroundColor.withOpacity(0.7)
+                        ? AppTheme.backgroundColor.withValues(alpha:0.7)
                         : Colors.transparent,
                     border: Border(
                       bottom: BorderSide(

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../animations/fade_animation.dart';
 import '../services/data_service.dart';
 import '../theme/app_theme.dart';
+import 'dart:ui';
 
 class Skill {
   final String name;
@@ -34,40 +35,39 @@ class TechnicalSkillsSection extends StatelessWidget {
             const SizedBox(height: 80),
             FadeAnimation(
               delay: const Duration(milliseconds: 200),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor.withValues(alpha:0.8),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppTheme.borderColor.withValues(alpha:0.3),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha:0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(categories.length, (index) {
-                    final category = categories[index];
-                    final skills = categorizedSkills[category]!;
-                    return Expanded(
-                      child: FadeAnimation(
-                        delay: Duration(milliseconds: 200 * (index + 1)),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            right: index < categories.length - 1 ? 40 : 0,
-                          ),
-                          child: _buildSkillColumn(category, skills, index),
-                        ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceColor.withValues(alpha:0.5),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppTheme.borderColor.withValues(alpha:0.3),
+                        width: 1,
                       ),
-                    );
-                  }),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(categories.length, (index) {
+                        final category = categories[index];
+                        final skills = categorizedSkills[category]!;
+                        return Expanded(
+                          child: FadeAnimation(
+                            delay: Duration(milliseconds: 200 * (index + 1)),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                right: index < categories.length - 1 ? 40 : 0,
+                              ),
+                              child: _buildSkillColumn(category, skills, index),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -179,7 +179,7 @@ class TechnicalSkillsSection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundColor.withValues(alpha: .5),
+          color: AppTheme.backgroundColor.withValues(alpha:.5),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: AppTheme.borderColor.withValues(alpha:0.2),
