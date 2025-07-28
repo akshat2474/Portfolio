@@ -2,7 +2,7 @@ import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme/app_theme.dart';
-import 'widgets/about_me.dart';
+import 'widgets/about_me.dart' hide AppTheme;
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
