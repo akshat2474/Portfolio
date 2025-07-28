@@ -7,8 +7,12 @@ import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
 import 'dart:ui';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  print("⏳ Loading .env...");
+  await dotenv.load(fileName: ".env");
+  print("✅ .env loaded!");
   runApp(const PortfolioApp());
 }
 
