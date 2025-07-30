@@ -3,7 +3,7 @@
 
 This is a custom portfolio website built with Flutter, showcasing my skills, projects, and interests with a modern, interactive design.
 
-**Live Demo**: *\[]*
+[**Live Demo**](https://akshatsingh-portfolio.netlify.app/)
 
 ---
 

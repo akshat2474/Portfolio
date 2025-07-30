@@ -41,10 +41,10 @@ class TechnicalSkillsSection extends StatelessWidget {
                     horizontal: isSmallScreen ? 24 : 40,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceColor.withOpacity(0.5),
+                    color: AppTheme.surfaceColor.withValues(alpha: .5),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: AppTheme.borderColor.withOpacity(0.3),
+                      color: AppTheme.borderColor.withValues(alpha:0.3),
                       width: 1,
                     ),
                   ),
@@ -149,7 +149,7 @@ class TechnicalSkillsSection extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: AppTheme.primaryColor.withOpacity(0.3),
+                color: AppTheme.primaryColor.withValues(alpha:0.3),
                 width: 2,
               ),
             ),
@@ -201,10 +201,10 @@ class TechnicalSkillsSection extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundColor.withOpacity(.5),
+          color: AppTheme.backgroundColor.withValues(alpha:.5),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.borderColor.withOpacity(0.2),
+            color: AppTheme.borderColor.withValues(alpha:0.2),
           ),
         ),
         child: Row(
@@ -213,7 +213,7 @@ class TechnicalSkillsSection extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha:0.2),
                 shape: BoxShape.circle,
               ),
               child: Center(
