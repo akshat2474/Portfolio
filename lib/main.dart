@@ -1,15 +1,17 @@
+import 'package:akshat_portfolio/theme/theme_notifier.dart';
 import 'package:akshat_portfolio/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'theme/app_theme.dart';
-import 'widgets/about_me.dart' ;
+import 'widgets/about_me.dart';
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<void> main() async {
+Future main() async {
   await dotenv.load(fileName: "dotenv");
   runApp(const PortfolioApp());
 }
@@ -19,13 +21,20 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Akshat Singh',
-      theme: AppTheme.darkTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
-      home: const SplashScreen(),
-      debugShowCheckedModeBanner: false,
+    return ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp(
+            title: 'Akshat Singh',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeNotifier.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            home: const SplashScreen(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }
@@ -43,7 +52,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   final GlobalKey _skillsKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _interestsKey = GlobalKey();
-
   bool _isScrolled = false;
 
   @override
@@ -82,88 +90,174 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     }
   }
 
-  // --- FINAL FIX: Use the correct asset path for web ---
   void _downloadResume() async {
-    // This is the correct path that Flutter generates for web assets.
-    const url = 'assets/assets/resume/Resume.pdf'; 
+    const url = 'assets/assets/resume/Resume.pdf';
     final uri = Uri.parse(url);
-
     if (!await launchUrl(uri)) {
       debugPrint('Could not launch $url');
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            pinned: true,
-            floating: true,
-            toolbarHeight: 80,
-            flexibleSpace: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                color: _isScrolled
-                    ? AppTheme.backgroundColor.withValues(alpha: .85)
-                    : Colors.transparent,
-                border: Border(
-                  bottom: BorderSide(
-                    color: _isScrolled
-                        ? AppTheme.borderColor
-                        : Colors.transparent,
-                    width: 1,
-                  ),
-                ),
-              ),
-              child: Center(
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 1200),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Akshat Singh',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          color: AppTheme.textPrimary,
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return Scaffold(
+          body: Stack(
+            children: [
+              // Main content
+              CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  SliverAppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    pinned: true,
+                    floating: true,
+                    toolbarHeight: 80,
+                    flexibleSpace: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      decoration: BoxDecoration(
+                        color: _isScrolled
+                            ? AppTheme.backgroundColor.withValues(alpha: .85)
+                            : Colors.transparent,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: _isScrolled
+                                ? AppTheme.borderColor
+                                : Colors.transparent,
+                            width: 1,
+                          ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _HoverNavButton(
-                              text: 'Resume',
-                              onPressed: _downloadResume),
-                        ],
+                      child: Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 1200),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Akshat Singh',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: AppTheme.textPrimary,
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _ThemeToggleButton(),
+                                  const SizedBox(width: 16),
+                                  _HoverNavButton(
+                                    text: 'Resume',
+                                    onPressed: _downloadResume,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
+                    ),
+                    titleSpacing: 0,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      AboutMeSection(
+                        key: _aboutKey,
+                        onViewWorkPressed: () => _scrollToSection(_projectsKey),
+                      ),
+                      TechnicalSkillsSection(key: _skillsKey),
+                      ProjectsSection(key: _projectsKey),
+                      PersonalInterestsSection(key: _interestsKey),
+                    ]),
+                  ),
+                ],
+              ),
+              // Interactive floating elements - positioned to not interfere with content
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: false,
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    margin: const EdgeInsets.symmetric(horizontal: 100),
                   ),
                 ),
               ),
-            ),
-            titleSpacing: 0,
+            ],
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              AboutMeSection(
-                key: _aboutKey,
-                onViewWorkPressed: () => _scrollToSection(_projectsKey),
+        );
+      },
+    );
+  }
+}
+
+class _ThemeToggleButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: themeNotifier.toggleTheme,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: 60,
+              height: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: themeNotifier.isDarkMode
+                    ? AppTheme.surfaceColor
+                    : AppTheme.borderColor,
+                border: Border.all(
+                  color: AppTheme.borderColor,
+                  width: 1,
+                ),
               ),
-              TechnicalSkillsSection(key: _skillsKey),
-              ProjectsSection(key: _projectsKey),
-              PersonalInterestsSection(key: _interestsKey),
-            ]),
+              child: Stack(
+                children: [
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    left: themeNotifier.isDarkMode ? 2 : 32,
+                    top: 2,
+                    child: Container(
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: themeNotifier.isDarkMode
+                            ? AppTheme.primaryColor
+                            : Colors.orange,
+                        boxShadow: [
+                          BoxShadow(
+                            color: (themeNotifier.isDarkMode
+                                    ? AppTheme.primaryColor
+                                    : Colors.orange)
+                                .withOpacity(0.3),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        themeNotifier.isDarkMode
+                            ? Icons.nightlight_round
+                            : Icons.wb_sunny,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -178,8 +272,33 @@ class _HoverNavButton extends StatefulWidget {
   __HoverNavButtonState createState() => __HoverNavButtonState();
 }
 
-class __HoverNavButtonState extends State<_HoverNavButton> {
+class __HoverNavButtonState extends State<_HoverNavButton>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutCubic,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,32 +309,40 @@ class __HoverNavButtonState extends State<_HoverNavButton> {
       onEnter: (_) => _onHover(true),
       onExit: (_) => _onHover(false),
       cursor: SystemMouseCursors.click,
-      child: InkWell(
-        onTap: widget.onPressed,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.text,
-                style: GoogleFonts.poppins(
-                  color: _isHovered ? hoveredColor : nonHoveredColor,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.5,
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: InkWell(
+              onTap: widget.onPressed,
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.text,
+                      style: GoogleFonts.poppins(
+                        color: _isHovered ? hoveredColor : nonHoveredColor,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 2,
+                      width: _isHovered ? 20 : 0,
+                      color: hoveredColor,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 4),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                height: 2,
-                width: _isHovered ? 20 : 0,
-                color: hoveredColor,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -224,5 +351,10 @@ class __HoverNavButtonState extends State<_HoverNavButton> {
     setState(() {
       _isHovered = isHovered;
     });
+    if (isHovered) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
   }
 }
