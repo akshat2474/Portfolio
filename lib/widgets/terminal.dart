@@ -9,11 +9,13 @@ import '../theme/app_theme.dart';
 class Terminal extends StatefulWidget {
   final bool isMaximized;
   final VoidCallback? onToggleMaximize;
+  final VoidCallback? onClose; // Add close callback
 
   const Terminal({
     super.key,
     this.isMaximized = false,
     this.onToggleMaximize,
+    this.onClose, // Add this parameter
   });
 
   @override
@@ -666,6 +668,7 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   void _handleTheme() {
     _addLine('Theme toggle feature - implement theme switching here',
         TerminalLineType.info);
+    
   }
 
   void _handleResume() {
@@ -719,12 +722,9 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   void _handleExit() {
-    if (widget.isMaximized) {
-      widget.onToggleMaximize?.call();
-    }
-    _addLine('Goodbye! Thanks for visiting my portfolio! 👋',
-        TerminalLineType.success);
-  }
+  _addLine('Use the red button to close or minimize the terminal! 🔴', TerminalLineType.success);
+  _addLine('Green button maximizes/minimizes the terminal window! 🟢', TerminalLineType.info);
+}
 
   void _launchUrl(String url) async {
     final uri = Uri.parse(url);
@@ -808,63 +808,71 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   Widget _buildTerminalHeader() {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(widget.isMaximized ? 0 : 12),
-        ),
-        border: Border(
-          bottom: BorderSide(color: AppTheme.borderColor),
-        ),
+  return Container(
+    height: 40,
+    decoration: BoxDecoration(
+      color: AppTheme.surfaceColor,
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(widget.isMaximized ? 0 : 12),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            Row(
-              children: [
-                _buildWindowButton(Colors.red, onTap: widget.onToggleMaximize),
-                const SizedBox(width: 6),
-                _buildWindowButton(Colors.yellow, onTap: () {}),
-                const SizedBox(width: 6),
-                _buildWindowButton(Colors.green,
-                    onTap: widget.onToggleMaximize),
-              ],
-            ),
-            const SizedBox(width: 16),
-            Icon(
-              Icons.terminal,
-              size: 16,
-              color: AppTheme.primaryColor,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Terminal - Akshat\'s Portfolio',
-                style: GoogleFonts.firaCode(
-                  fontSize: 12,
-                  color: AppTheme.textSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
+      border: Border(
+        bottom: BorderSide(color: AppTheme.borderColor),
+      ),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          // Window controls
+          Row(
+            children: [
+              _buildWindowButton(
+                Colors.red, 
+                onTap: widget.isMaximized 
+                  ? widget.onToggleMaximize  // Maximize/minimize when maximized
+                  : widget.onClose,         // Close when not maximized
+              ),
+              const SizedBox(width: 6),
+              _buildWindowButton(Colors.yellow, onTap: () {}),
+              const SizedBox(width: 6),
+              _buildWindowButton(
+                Colors.green, 
+                onTap: widget.onToggleMaximize,
+              ),
+            ],
+          ),
+          const SizedBox(width: 16),
+          Icon(
+            Icons.terminal,
+            size: 16,
+            color: AppTheme.primaryColor,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Terminal - Akshat\'s Portfolio',
+              style: GoogleFonts.firaCode(
+                fontSize: 12,
+                color: AppTheme.textSecondary,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            if (widget.onToggleMaximize != null)
-              IconButton(
-                onPressed: widget.onToggleMaximize,
-                icon: Icon(
-                  widget.isMaximized ? Icons.fullscreen_exit : Icons.fullscreen,
-                  size: 16,
-                  color: AppTheme.textSecondary,
-                ),
-                splashRadius: 16,
+          ),
+          if (widget.onToggleMaximize != null)
+            IconButton(
+              onPressed: widget.onToggleMaximize,
+              icon: Icon(
+                widget.isMaximized ? Icons.fullscreen_exit : Icons.fullscreen,
+                size: 16,
+                color: AppTheme.textSecondary,
               ),
-          ],
-        ),
+              splashRadius: 16,
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildWindowButton(Color color, {VoidCallback? onTap}) {
     return GestureDetector(

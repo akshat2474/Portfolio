@@ -121,6 +121,15 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     }
   }
 
+  void _closeTerminal() {
+    setState(() {
+      _showTerminal = false;
+      _isTerminalMaximized = false;
+    });
+    _terminalOverlay?.remove();
+    _terminalOverlay = null;
+  }
+
   void _toggleTerminalMaximize() {
     setState(() {
       _isTerminalMaximized = !_isTerminalMaximized;
@@ -138,6 +147,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
           child: Terminal(
             isMaximized: true,
             onToggleMaximize: _toggleTerminalMaximize,
+            onClose: _closeTerminal,
           ),
         ),
       );
@@ -162,6 +172,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         child: Terminal(
           isMaximized: false,
           onToggleMaximize: _toggleTerminalMaximize,
+          onClose: _closeTerminal,
         ),
       ),
     );
@@ -174,6 +185,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         return Scaffold(
           body: Stack(
             children: [
+              // Main content
               CustomScrollView(
                 controller: _scrollController,
                 slivers: [
@@ -219,11 +231,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                                   _ThemeToggleButton(),
                                   const SizedBox(width: 16),
                                   _HoverNavButton(
-                                    text: 'Terminal',
-                                    onPressed: _toggleTerminal,
-                                  ),
-                                  const SizedBox(width: 16),
-                                  _HoverNavButton(
                                     text: 'Resume',
                                     onPressed: _downloadResume,
                                   ),
@@ -249,16 +256,44 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   ),
                 ],
               ),
+              
+              Positioned(
+                right: 24,
+                top: 4/5*MediaQuery.of(context).size.height ,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: _toggleTerminal,
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                              blurRadius: 15,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.terminal,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
-          floatingActionButton: !_showTerminal
-              ? FloatingActionButton(
-                  onPressed: _toggleTerminal,
-                  backgroundColor: AppTheme.primaryColor,
-                  tooltip: 'Open Terminal',
-                  child: const Icon(Icons.terminal, color: Colors.white),
-                )
-              : null,
+          // Remove floatingActionButton completely
         );
       },
     );
@@ -429,4 +464,3 @@ class __HoverNavButtonState extends State<_HoverNavButton>
     }
   }
 }
-

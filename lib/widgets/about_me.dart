@@ -80,11 +80,6 @@ class AboutMeSection extends StatelessWidget {
                 delay: const Duration(milliseconds: 1200),
                 child: _buildCodeEditorWithLabel(),
               ),
-              const SizedBox(height: 24),
-              FadeAnimation(
-                delay: const Duration(milliseconds: 1400),
-                child: _buildTerminalWithLabel(),
-              ),
             ],
           ),
         ),
@@ -103,47 +98,10 @@ class AboutMeSection extends StatelessWidget {
           delay: const Duration(milliseconds: 1200),
           child: _buildCodeEditorWithLabel(isCentered: true),
         ),
-        const SizedBox(height: 24),
-        FadeAnimation(
-          delay: const Duration(milliseconds: 1400),
-          child: _buildTerminalWithLabel(isCentered: true),
-        ),
       ],
     );
   }
 
-  Widget _buildTerminalWithLabel({bool isCentered = false}) {
-    return Column(
-      crossAxisAlignment:
-          isCentered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
-          child: Text(
-            "✨ Interactive terminal below!",
-            style: GoogleFonts.firaCode(
-              fontSize: 14,
-              color: AppTheme.AppTheme.textSecondary.withValues(alpha: 0.8),
-            ),
-          ),
-        ),
-        Container(
-          height: 300,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: const Terminal(),
-        ),
-      ],
-    );
-  }
 
   Widget _buildCodeEditorWithLabel({bool isCentered = false}) {
     return Column(
