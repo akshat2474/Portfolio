@@ -25,7 +25,6 @@ class AppTheme {
   static const Color accentGreen = Color(0xFF10B981);
   static const Color accentRed = Color(0xFFEF4444);
 
-  // Current theme colors (will be updated by ThemeNotifier)
   static Color primaryColor = darkPrimaryColor;
   static Color backgroundColor = darkBackgroundColor;
   static Color surfaceColor = darkSurfaceColor;

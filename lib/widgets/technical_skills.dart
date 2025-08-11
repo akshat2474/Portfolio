@@ -48,11 +48,9 @@ class TechnicalSkillsSection extends StatelessWidget {
                       width: 1,
                     ),
                   ),
-                  // Use LayoutBuilder to create a responsive layout
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       if (constraints.maxWidth < 800) {
-                        // For smaller screens, use a Column to stack categories
                         return Column(
                           children:
                               List.generate(categories.length, (index) {
@@ -67,7 +65,6 @@ class TechnicalSkillsSection extends StatelessWidget {
                           }),
                         );
                       } else {
-                        // For larger screens, use a Row
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:
@@ -122,7 +119,7 @@ class TechnicalSkillsSection extends StatelessWidget {
           'Technical Expertise',
           textAlign: TextAlign.center,
           style: GoogleFonts.inter(
-            fontSize: isSmallScreen ? 36 : 48, // Adjust font size for mobile
+            fontSize: isSmallScreen ? 36 : 48, 
             fontWeight: FontWeight.bold,
             color: AppTheme.textPrimary,
           ),

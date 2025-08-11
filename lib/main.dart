@@ -174,7 +174,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
         return Scaffold(
           body: Stack(
             children: [
-              // Main content
               CustomScrollView(
                 controller: _scrollController,
                 slivers: [
@@ -252,7 +251,6 @@ class _PortfolioHomeState extends State<PortfolioHome> {
               ),
             ],
           ),
-          // Floating Terminal Button
           floatingActionButton: !_showTerminal
               ? FloatingActionButton(
                   onPressed: _toggleTerminal,

@@ -24,21 +24,39 @@ class _TerminalState extends State<Terminal> with TickerProviderStateMixin {
   final TextEditingController _inputController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
-  
+
   final List<TerminalLine> _lines = [];
   final List<String> _commandHistory = [];
   int _historyIndex = -1;
   String _currentInput = '';
   String _currentDirectory = '~';
   Map<String, dynamic> _fileSystem = {};
-  
+
   late AnimationController _cursorController;
   late Animation<double> _cursorAnimation;
-  
+
   final List<String> _availableCommands = [
-    'help', 'about', 'skills', 'projects', 'contact', 'clear', 'ls', 'cd',
-    'cat', 'whoami', 'pwd', 'history', 'theme', 'social', 'resume', 'joke',
-    'date', 'uptime', 'neofetch', 'tree', 'exit'
+    'help',
+    'about',
+    'skills',
+    'projects',
+    'contact',
+    'clear',
+    'ls',
+    'cd',
+    'cat',
+    'whoami',
+    'pwd',
+    'history',
+    'theme',
+    'social',
+    'resume',
+    'joke',
+    'date',
+    'uptime',
+    'neofetch',
+    'tree',
+    'exit'
   ];
 
   @override
@@ -63,7 +81,7 @@ class _TerminalState extends State<Terminal> with TickerProviderStateMixin {
   void _initializeFileSystem() {
     final projects = DataService.getProjects();
     final skills = DataService.getCategorizedSkills();
-    
+
     _fileSystem = {
       'home': {
         'type': 'directory',
@@ -82,7 +100,8 @@ class _TerminalState extends State<Terminal> with TickerProviderStateMixin {
             'type': 'directory',
             'contents': {
               for (var category in skills.keys)
-                '${category.toLowerCase().replaceAll(' & ', '_').replaceAll(' ', '_')}.txt': {
+                '${category.toLowerCase().replaceAll(' & ', '_').replaceAll(' ', '_')}.txt':
+                    {
                   'type': 'file',
                   'content': skills[category]!.map((s) => s.name).join(', '),
                 }
@@ -90,11 +109,13 @@ class _TerminalState extends State<Terminal> with TickerProviderStateMixin {
           },
           'about.txt': {
             'type': 'file',
-            'content': 'Akshat Singh - Flutter Developer\n\nPassionate developer creating beautiful mobile applications with Flutter.\nCurrently pursuing Computer Science at DTU, focusing on cutting-edge software development and machine learning.',
+            'content':
+                'Akshat Singh - Flutter Developer\n\nPassionate developer creating beautiful mobile applications with Flutter.\nCurrently pursuing Computer Science at DTU, focusing on cutting-edge software development and machine learning.',
           },
           'contact.txt': {
             'type': 'file',
-            'content': 'Email: akshatsingh2474@gmail.com\nGitHub: https://github.com/akshat2474\nLinkedIn: https://www.linkedin.com/in/akshat-singh-48a03b312',
+            'content':
+                'Email: akshatsingh2474@gmail.com\nGitHub: https://github.com/akshat2474\nLinkedIn: https://www.linkedin.com/in/akshat-singh-48a03b312',
           },
           'resume.pdf': {
             'type': 'file',
@@ -128,7 +149,8 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
 
   void _initializeTerminal() {
     _addLine('', TerminalLineType.system);
-    _addLine('Welcome to Akshat\'s Portfolio Terminal!', TerminalLineType.success);
+    _addLine(
+        'Welcome to Akshat\'s Portfolio Terminal!', TerminalLineType.success);
     _addLine('Type "help" to see available commands.', TerminalLineType.info);
     _addLine('', TerminalLineType.system);
   }
@@ -147,7 +169,8 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
       _lines.add(TerminalLine(
         text: text,
         type: type,
-        prompt: prompt ?? (type == TerminalLineType.input ? _getPrompt() : null),
+        prompt:
+            prompt ?? (type == TerminalLineType.input ? _getPrompt() : null),
       ));
     });
     _scrollToBottom();
@@ -172,14 +195,11 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   void _handleCommand(String input) {
     if (input.trim().isEmpty) return;
 
-    // Add input to history
     _commandHistory.add(input);
     _historyIndex = -1;
 
-    // Add command to terminal
     _addLine(input, TerminalLineType.input);
 
-    // Parse and execute command
     final parts = input.trim().split(' ');
     final command = parts[0].toLowerCase();
     final args = parts.skip(1).toList();
@@ -254,14 +274,15 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
         break;
       default:
         _addLine('Command not found: $command', TerminalLineType.error);
-        _addLine('Type "help" to see available commands.', TerminalLineType.info);
+        _addLine(
+            'Type "help" to see available commands.', TerminalLineType.info);
     }
   }
 
   void _handleHelp() {
     _addLine('Available commands:', TerminalLineType.success);
     _addLine('', TerminalLineType.system);
-    
+
     final commands = {
       'help': 'Show this help message',
       'about': 'About Akshat Singh',
@@ -285,31 +306,37 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
       'joke': 'Random programming joke',
       'exit': 'Close terminal',
     };
-    
+
     for (final entry in commands.entries) {
-      _addLine('  ${entry.key.padRight(20)} ${entry.value}', TerminalLineType.output);
+      _addLine('  ${entry.key.padRight(20)} ${entry.value}',
+          TerminalLineType.output);
     }
   }
 
   void _handleAbout() {
     _addLine('About Akshat Singh', TerminalLineType.success);
     _addLine('', TerminalLineType.system);
-    _addLine('🚀 Flutter Developer & Computer Science Student', TerminalLineType.output);
-    _addLine('🎓 Studying at Delhi Technological University (DTU)', TerminalLineType.output);
-    _addLine('💡 Passionate about mobile app development and ML', TerminalLineType.output);
-    _addLine('🔧 Creating beautiful, high-performance applications', TerminalLineType.output);
+    _addLine('🚀 Flutter Developer & Computer Science Student',
+        TerminalLineType.output);
+    _addLine('🎓 Studying at Delhi Technological University (DTU)',
+        TerminalLineType.output);
+    _addLine('💡 Passionate about mobile app development and ML',
+        TerminalLineType.output);
+    _addLine('🔧 Creating beautiful, high-performance applications',
+        TerminalLineType.output);
     _addLine('', TerminalLineType.system);
-    _addLine('Currently focusing on cutting-edge software development', TerminalLineType.output);
+    _addLine('Currently focusing on cutting-edge software development',
+        TerminalLineType.output);
     _addLine('and machine learning technologies.', TerminalLineType.output);
   }
 
   void _handleSkills(List<String> args) {
     final skills = DataService.getCategorizedSkills();
-    
+
     if (args.isEmpty) {
       _addLine('Technical Skills:', TerminalLineType.success);
       _addLine('', TerminalLineType.system);
-      
+
       for (final category in skills.keys) {
         _addLine('📁 $category:', TerminalLineType.info);
         for (final skill in skills[category]!) {
@@ -323,7 +350,7 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
         (k) => k.toLowerCase().contains(category.toLowerCase()),
         orElse: () => '',
       );
-      
+
       if (matchedCategory.isNotEmpty) {
         _addLine('$matchedCategory:', TerminalLineType.success);
         for (final skill in skills[matchedCategory]!) {
@@ -337,15 +364,16 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
 
   void _handleProjects(List<String> args) {
     final projects = DataService.getProjects();
-    
+
     if (args.isEmpty) {
       _addLine('Featured Projects:', TerminalLineType.success);
       _addLine('', TerminalLineType.system);
-      
+
       for (final project in projects) {
         _addLine('🚀 ${project.name}', TerminalLineType.info);
         _addLine('   ${project.overview}', TerminalLineType.output);
-        _addLine('   Technologies: ${project.technologies.take(3).join(', ')}', TerminalLineType.output);
+        _addLine('   Technologies: ${project.technologies.take(3).join(', ')}',
+            TerminalLineType.output);
         if (project.liveUrl != null) {
           _addLine('   Live: ${project.liveUrl}', TerminalLineType.output);
         }
@@ -357,7 +385,7 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
         (p) => p.name.toLowerCase().contains(projectName.toLowerCase()),
         orElse: () => projects.first,
       );
-      
+
       _addLine('Project: ${project.name}', TerminalLineType.success);
       _addLine('', TerminalLineType.system);
       _addLine(project.overview, TerminalLineType.output);
@@ -367,7 +395,8 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
         _addLine('• $feature', TerminalLineType.output);
       }
       _addLine('', TerminalLineType.system);
-      _addLine('Technologies: ${project.technologies.join(', ')}', TerminalLineType.output);
+      _addLine('Technologies: ${project.technologies.join(', ')}',
+          TerminalLineType.output);
       if (project.liveUrl != null) {
         _addLine('Live Demo: ${project.liveUrl}', TerminalLineType.output);
       }
@@ -381,23 +410,25 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
     _addLine('Contact Information:', TerminalLineType.success);
     _addLine('', TerminalLineType.system);
     _addLine('📧 Email: akshatsingh2474@gmail.com', TerminalLineType.output);
-    _addLine('💼 LinkedIn: linkedin.com/in/akshat-singh-48a03b312', TerminalLineType.output);
+    _addLine('💼 LinkedIn: linkedin.com/in/akshat-singh-48a03b312',
+        TerminalLineType.output);
     _addLine('🐙 GitHub: github.com/akshat2474', TerminalLineType.output);
     _addLine('', TerminalLineType.system);
-    _addLine('Feel free to reach out for collaborations or opportunities!', TerminalLineType.info);
+    _addLine('Feel free to reach out for collaborations or opportunities!',
+        TerminalLineType.info);
   }
 
   void _handleSocial() {
     _addLine('Social Media & Profiles:', TerminalLineType.success);
     _addLine('', TerminalLineType.system);
-    
+
     final links = {
       'GitHub': 'https://github.com/akshat2474',
       'LinkedIn': 'https://www.linkedin.com/in/akshat-singh-48a03b312',
       'Lichess': 'https://lichess.org/@/akshat2474',
       'Chess.com': 'https://www.chess.com/member/akshat2474',
     };
-    
+
     for (final entry in links.entries) {
       _addLine('${entry.key}: ${entry.value}', TerminalLineType.output);
     }
@@ -410,29 +441,162 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   void _handleLs(List<String> args) {
-    // Simplified ls implementation
-    _addLine('Projects/', TerminalLineType.info);
-    _addLine('Skills/', TerminalLineType.info);
-    _addLine('about.txt', TerminalLineType.output);
-    _addLine('contact.txt', TerminalLineType.output);
-    _addLine('resume.pdf', TerminalLineType.output);
-  }
+    String path = args.isEmpty ? _currentDirectory : args[0];
+    if (path == '.') {
+      path = _currentDirectory;
+    } else if (path == '..') {
+      if (_currentDirectory != '~') {
+        final parts = _currentDirectory.split('/');
+        parts.removeLast();
+        path = parts.isEmpty ? '~' : parts.join('/');
+      } else {
+        path = '~';
+      }
+    } else if (!path.startsWith('~')) {
+      if (_currentDirectory == '~') {
+        path = '~/$path';
+      } else {
+        path = '$_currentDirectory/$path';
+      }
+    }
 
-  void _handleCd(List<String> args) {
-    if (args.isEmpty) {
-      _currentDirectory = '~';
-    } else {
-      final path = args[0];
-      if (path == '..') {
-        _currentDirectory = '~';
-      } else if (['projects', 'skills'].contains(path.toLowerCase())) {
-        _currentDirectory = '~/$path';
+    dynamic currentNode = _fileSystem['home'];
+    final pathParts = path == '~'
+        ? []
+        : path.substring(2).split('/').where((p) => p.isNotEmpty).toList();
+
+    for (final part in pathParts) {
+      if (currentNode != null &&
+          currentNode['type'] == 'directory' &&
+          currentNode['contents'] != null &&
+          currentNode['contents'][part] != null) {
+        currentNode = currentNode['contents'][part];
       } else {
         _addLine('Directory not found: $path', TerminalLineType.error);
         return;
       }
     }
-    _addLine('Changed directory to $_currentDirectory', TerminalLineType.success);
+
+    if (currentNode != null &&
+        currentNode['type'] == 'directory' &&
+        currentNode['contents'] != null) {
+      final contents = currentNode['contents'] as Map<String, dynamic>;
+      if (contents.isEmpty) {
+        _addLine('Directory is empty', TerminalLineType.info);
+        return;
+      }
+
+      for (final entry in contents.entries) {
+        final isDir = entry.value['type'] == 'directory';
+        final icon = isDir ? '📁' : '📄';
+        final color = isDir ? TerminalLineType.info : TerminalLineType.output;
+        _addLine('$icon ${entry.key}${isDir ? '/' : ''}', color);
+      }
+    } else {
+      _addLine('Not a directory: $path', TerminalLineType.error);
+    }
+  }
+
+  void _handleCd(List<String> args) {
+    if (args.isEmpty) {
+      _currentDirectory = '~';
+      _addLine(
+          'Changed directory to $_currentDirectory', TerminalLineType.success);
+      return;
+    }
+
+    String targetPath = args[0];
+
+    if (targetPath == '~' || targetPath == '/') {
+      _currentDirectory = '~';
+      _addLine(
+          'Changed directory to $_currentDirectory', TerminalLineType.success);
+      return;
+    }
+
+    if (targetPath == '..') {
+      if (_currentDirectory != '~') {
+        final parts = _currentDirectory.split('/');
+        parts.removeLast();
+        _currentDirectory = parts.isEmpty ? '~' : parts.join('/');
+        _addLine('Changed directory to $_currentDirectory',
+            TerminalLineType.success);
+      } else {
+        _addLine('Already at root directory', TerminalLineType.info);
+      }
+      return;
+    }
+
+    if (targetPath == '.') {
+      _addLine('Already in $_currentDirectory', TerminalLineType.info);
+      return;
+    }
+
+    String newPath;
+    if (targetPath.startsWith('~')) {
+      newPath = targetPath;
+    } else {
+      if (_currentDirectory == '~') {
+        newPath = '~/$targetPath';
+      } else {
+        newPath = '$_currentDirectory/$targetPath';
+      }
+    }
+
+    dynamic currentNode = _fileSystem['home'];
+    final pathParts = newPath == '~'
+        ? []
+        : newPath.substring(2).split('/').where((p) => p.isNotEmpty).toList();
+
+    for (final part in pathParts) {
+      if (currentNode != null &&
+          currentNode['type'] == 'directory' &&
+          currentNode['contents'] != null &&
+          currentNode['contents'][part] != null) {
+        currentNode = currentNode['contents'][part];
+      } else {
+        _addLine('Directory not found: $newPath', TerminalLineType.error);
+        return;
+      }
+    }
+
+    if (currentNode != null && currentNode['type'] == 'directory') {
+      _currentDirectory = newPath;
+      _addLine(
+          'Changed directory to $_currentDirectory', TerminalLineType.success);
+    } else {
+      _addLine('Not a directory: $newPath', TerminalLineType.error);
+    }
+  }
+
+  void _handleTree() {
+    _addLine('Portfolio Structure:', TerminalLineType.success);
+    _addLine('├── Projects/', TerminalLineType.output);
+
+    final projects = DataService.getProjects();
+    for (int i = 0; i < projects.length; i++) {
+      final isLast = i == projects.length - 1;
+      final prefix = isLast ? '│   └── ' : '│   ├── ';
+      final projectName = projects[i].name.toLowerCase().replaceAll(' ', '_');
+      _addLine('$prefix$projectName.md', TerminalLineType.output);
+    }
+
+    _addLine('├── Skills/', TerminalLineType.output);
+    final skills = DataService.getCategorizedSkills();
+    final skillCategories = skills.keys.toList();
+    for (int i = 0; i < skillCategories.length; i++) {
+      final isLast = i == skillCategories.length - 1;
+      final prefix = isLast ? '│   └── ' : '│   ├── ';
+      final categoryName = skillCategories[i]
+          .toLowerCase()
+          .replaceAll(' & ', '_')
+          .replaceAll(' ', '_');
+      _addLine('$prefix$categoryName.txt', TerminalLineType.output);
+    }
+
+    _addLine('├── about.txt', TerminalLineType.output);
+    _addLine('├── contact.txt', TerminalLineType.output);
+    _addLine('└── resume.pdf', TerminalLineType.output);
   }
 
   void _handleCat(List<String> args) {
@@ -440,25 +604,52 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
       _addLine('Usage: cat <filename>', TerminalLineType.error);
       return;
     }
-    
-    final filename = args[0];
-    switch (filename.toLowerCase()) {
-      case 'about.txt':
-        _handleAbout();
-        break;
-      case 'contact.txt':
-        _handleContact();
-        break;
-      case 'resume.pdf':
-        _addLine('This is a binary file. Use "resume" command to download.', TerminalLineType.info);
-        break;
-      default:
+
+    String filename = args[0];
+    String filePath;
+
+    if (filename.contains('/')) {
+      filePath =
+          filename.startsWith('~') ? filename : '$_currentDirectory/$filename';
+    } else {
+      filePath = _currentDirectory == '~'
+          ? '~/$filename'
+          : '$_currentDirectory/$filename';
+    }
+
+    dynamic currentNode = _fileSystem['home'];
+    final pathParts = filePath == '~'
+        ? []
+        : filePath.substring(2).split('/').where((p) => p.isNotEmpty).toList();
+
+    for (final part in pathParts) {
+      if (currentNode != null &&
+          currentNode['type'] == 'directory' &&
+          currentNode['contents'] != null &&
+          currentNode['contents'][part] != null) {
+        currentNode = currentNode['contents'][part];
+      } else {
         _addLine('File not found: $filename', TerminalLineType.error);
+        return;
+      }
+    }
+
+    if (currentNode != null && currentNode['type'] == 'file') {
+      final content = currentNode['content'] as String;
+      final lines = content.split('\n');
+      for (final line in lines) {
+        _addLine(line, TerminalLineType.output);
+      }
+    } else if (currentNode != null && currentNode['type'] == 'directory') {
+      _addLine('$filename is a directory', TerminalLineType.error);
+    } else {
+      _addLine('File not found: $filename', TerminalLineType.error);
     }
   }
 
   void _handlePwd() {
-    _addLine('/home/akshat/portfolio$_currentDirectory', TerminalLineType.output);
+    _addLine(
+        '/home/akshat/portfolio$_currentDirectory', TerminalLineType.output);
   }
 
   void _handleWhoami() {
@@ -473,8 +664,8 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   void _handleTheme() {
-    // This would need to be connected to your theme notifier
-    _addLine('Theme toggle feature - implement theme switching here', TerminalLineType.info);
+    _addLine('Theme toggle feature - implement theme switching here',
+        TerminalLineType.info);
   }
 
   void _handleResume() {
@@ -488,37 +679,31 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   void _handleUptime() {
-    _addLine('System uptime: Portfolio running since page load', TerminalLineType.output);
+    _addLine('System uptime: Portfolio running since page load',
+        TerminalLineType.output);
   }
 
   void _handleNeofetch() {
     _addLine('', TerminalLineType.system);
-    _addLine('     ██████████████     akshat@portfolio', TerminalLineType.success);
-    _addLine('   ██                ██ ─────────────────', TerminalLineType.success);
-    _addLine('  ██    ████████    ██  OS: Portfolio Web', TerminalLineType.output);
-    _addLine(' ██    ██      ██    ██ Host: Flutter Web', TerminalLineType.output);
-    _addLine(' ██    ██      ██    ██ Theme: ${AppTheme.primaryColor}', TerminalLineType.output);
-    _addLine(' ██    ████████    ██  Shell: terminal.dart', TerminalLineType.output);
-    _addLine('  ██                ██  Skills: Flutter, Python, C++', TerminalLineType.output);
-    _addLine('   ██              ██   Location: Delhi, India', TerminalLineType.output);
-    _addLine('     ██████████████     University: DTU', TerminalLineType.output);
+    _addLine(
+        '     ██████████████     akshat@portfolio', TerminalLineType.success);
+    _addLine(
+        '   ██                ██ ─────────────────', TerminalLineType.success);
+    _addLine(
+        '  ██    ████████    ██  OS: Portfolio Web', TerminalLineType.output);
+    _addLine(
+        ' ██    ██      ██    ██ Host: Flutter Web', TerminalLineType.output);
+    _addLine(' ██    ██      ██    ██ Theme: ${AppTheme.primaryColor}',
+        TerminalLineType.output);
+    _addLine(
+        ' ██    ████████    ██  Shell: terminal.dart', TerminalLineType.output);
+    _addLine('  ██                ██  Skills: Flutter, Python, C++',
+        TerminalLineType.output);
+    _addLine('   ██              ██   Location: Delhi, India',
+        TerminalLineType.output);
+    _addLine(
+        '     ██████████████     University: DTU', TerminalLineType.output);
     _addLine('', TerminalLineType.system);
-  }
-
-  void _handleTree() {
-    _addLine('Portfolio Structure:', TerminalLineType.success);
-    _addLine('├── Projects/', TerminalLineType.output);
-    _addLine('│   ├── CarbonEye', TerminalLineType.output);
-    _addLine('│   ├── Color Harmony', TerminalLineType.output);
-    _addLine('│   ├── RetroDash', TerminalLineType.output);
-    _addLine('│   └── Hand2Hand', TerminalLineType.output);
-    _addLine('├── Skills/', TerminalLineType.output);
-    _addLine('│   ├── Languages', TerminalLineType.output);
-    _addLine('│   ├── Frameworks', TerminalLineType.output);
-    _addLine('│   └── Tools', TerminalLineType.output);
-    _addLine('├── about.txt', TerminalLineType.output);
-    _addLine('├── contact.txt', TerminalLineType.output);
-    _addLine('└── resume.pdf', TerminalLineType.output);
   }
 
   void _handleJoke() {
@@ -537,7 +722,8 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
     if (widget.isMaximized) {
       widget.onToggleMaximize?.call();
     }
-    _addLine('Goodbye! Thanks for visiting my portfolio! 👋', TerminalLineType.success);
+    _addLine('Goodbye! Thanks for visiting my portfolio! 👋',
+        TerminalLineType.success);
   }
 
   void _launchUrl(String url) async {
@@ -572,9 +758,10 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
     if (_historyIndex == -1) {
       _inputController.text = _currentInput;
     } else {
-      _inputController.text = _commandHistory[_commandHistory.length - 1 - _historyIndex];
+      _inputController.text =
+          _commandHistory[_commandHistory.length - 1 - _historyIndex];
     }
-    
+
     _inputController.selection = TextSelection.fromPosition(
       TextPosition(offset: _inputController.text.length),
     );
@@ -582,8 +769,9 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
 
   void _handleTabCompletion() {
     final input = _inputController.text;
-    final matches = _availableCommands.where((cmd) => cmd.startsWith(input)).toList();
-    
+    final matches =
+        _availableCommands.where((cmd) => cmd.startsWith(input)).toList();
+
     if (matches.length == 1) {
       _inputController.text = matches.first;
       _inputController.selection = TextSelection.fromPosition(
@@ -597,21 +785,24 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundColor,
-        borderRadius: BorderRadius.circular(widget.isMaximized ? 0 : 12),
-        border: Border.all(
-          color: AppTheme.borderColor,
-          width: widget.isMaximized ? 0 : 1,
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.backgroundColor,
+          borderRadius: BorderRadius.circular(widget.isMaximized ? 0 : 12),
+          border: Border.all(
+            color: AppTheme.borderColor,
+            width: widget.isMaximized ? 0 : 1,
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          _buildTerminalHeader(),
-          Expanded(child: _buildTerminalBody()),
-          _buildTerminalInput(),
-        ],
+        child: Column(
+          children: [
+            _buildTerminalHeader(),
+            Expanded(child: _buildTerminalBody()),
+            _buildTerminalInput(),
+          ],
+        ),
       ),
     );
   }
@@ -632,14 +823,14 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
-            // Window controls
             Row(
               children: [
                 _buildWindowButton(Colors.red, onTap: widget.onToggleMaximize),
                 const SizedBox(width: 6),
                 _buildWindowButton(Colors.yellow, onTap: () {}),
                 const SizedBox(width: 6),
-                _buildWindowButton(Colors.green, onTap: widget.onToggleMaximize),
+                _buildWindowButton(Colors.green,
+                    onTap: widget.onToggleMaximize),
               ],
             ),
             const SizedBox(width: 16),
@@ -756,65 +947,68 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   Widget _buildTerminalInput() {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppTheme.borderColor),
-        ),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Text(
-            _getPrompt(),
-            style: GoogleFonts.firaCode(
-              fontSize: 14,
-              color: AppTheme.primaryColor,
-              fontWeight: FontWeight.w500,
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppTheme.borderColor),
           ),
-          Expanded(
-            child: KeyboardListener(
-              focusNode: FocusNode(),
-              onKeyEvent: _handleKeyEvent,
-              child: TextField(
-                controller: _inputController,
-                focusNode: _focusNode,
-                autofocus: true,
-                style: GoogleFonts.firaCode(
-                  fontSize: 14,
-                  color: AppTheme.textPrimary,
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Type a command...',
-                  hintStyle: GoogleFonts.firaCode(
-                    fontSize: 14,
-                    color: AppTheme.textMuted,
-                  ),
-                ),
-                onSubmitted: (input) {
-                  _handleCommand(input);
-                  _inputController.clear();
-                  _focusNode.requestFocus();
-                },
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Text(
+              _getPrompt(),
+              style: GoogleFonts.firaCode(
+                fontSize: 14,
+                color: AppTheme.primaryColor,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ),
-          AnimatedBuilder(
-            animation: _cursorAnimation,
-            builder: (context, child) {
-              return Opacity(
-                opacity: _cursorAnimation.value,
-                child: Container(
-                  width: 8,
-                  height: 16,
-                  color: AppTheme.primaryColor,
+            Expanded(
+              child: KeyboardListener(
+                focusNode: FocusNode(),
+                onKeyEvent: _handleKeyEvent,
+                child: TextField(
+                  controller: _inputController,
+                  focusNode: _focusNode,
+                  autofocus: true,
+                  style: GoogleFonts.firaCode(
+                    fontSize: 14,
+                    color: AppTheme.textPrimary,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Type a command...',
+                    hintStyle: GoogleFonts.firaCode(
+                      fontSize: 14,
+                      color: AppTheme.textMuted,
+                    ),
+                  ),
+                  onSubmitted: (input) {
+                    _handleCommand(input);
+                    _inputController.clear();
+                    _focusNode.requestFocus();
+                  },
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _cursorAnimation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _cursorAnimation.value,
+                  child: Container(
+                    width: 8,
+                    height: 16,
+                    color: AppTheme.primaryColor,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

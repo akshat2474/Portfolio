@@ -313,9 +313,6 @@ class AboutMeSection extends StatelessWidget {
   }
 }
 
-// Keep all the existing AdvancedCodeEditor and related classes unchanged
-// [Previous code for AdvancedCodeEditor, _AdvancedCodeEditorState, etc. remains the same]
-
 class AdvancedCodeEditor extends StatefulWidget {
   const AdvancedCodeEditor({super.key});
 
@@ -662,7 +659,7 @@ int main() {
       offstage: _isMaximized,
       child: Container(
         width: 520,
-        height: 400, // Reduced height to accommodate terminal
+        height: 400, 
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: const Color(0xFF1E1E1E),

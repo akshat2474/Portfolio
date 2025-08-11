@@ -85,7 +85,6 @@ class ProjectsSection extends StatelessWidget {
   Widget _buildProjectsGrid(List<Project> projects) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Determine the number of columns based on screen width
         int crossAxisCount = 1;
         if (constraints.maxWidth > 1200) {
           crossAxisCount = 3;
@@ -93,9 +92,7 @@ class ProjectsSection extends StatelessWidget {
           crossAxisCount = 2;
         }
 
-        // Calculate the width of each grid item
         double itemWidth = (constraints.maxWidth - (crossAxisCount - 1) * 24) / crossAxisCount;
-        // Set a fixed height for the cards to maintain consistency
         double itemHeight = 480; 
 
         return GridView.builder(
@@ -103,7 +100,6 @@ class ProjectsSection extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            // Calculate aspect ratio dynamically
             childAspectRatio: itemWidth / itemHeight,
             crossAxisSpacing: 24,
             mainAxisSpacing: 24,
@@ -356,7 +352,6 @@ class _ProjectCard extends StatelessWidget {
   }
 }
 
-// Helper functions to determine styling based on project name
 Color _getStatusColor(String projectName) {
   switch (projectName.toLowerCase()) {
     case 'carboneye':
@@ -414,7 +409,6 @@ IconData _getProjectIcon(String projectName) {
   }
 }
 
-// Helper function to launch a URL
 void _launchUrl(String url) async {
   final uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
