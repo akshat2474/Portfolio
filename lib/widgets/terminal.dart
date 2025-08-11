@@ -50,7 +50,6 @@ class _TerminalState extends State<Terminal> with TickerProviderStateMixin {
     'whoami',
     'pwd',
     'history',
-    'theme',
     'social',
     'resume',
     'joke',
@@ -250,9 +249,6 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
       case 'history':
         _handleHistory();
         break;
-      case 'theme':
-        _handleTheme();
-        break;
       case 'resume':
         _handleResume();
         break;
@@ -300,7 +296,6 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
       'pwd': 'Print working directory',
       'whoami': 'Display current user',
       'history': 'Show command history',
-      'theme': 'Toggle theme',
       'date': 'Show current date',
       'uptime': 'Show system uptime',
       'neofetch': 'Show system info',
@@ -665,12 +660,6 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
     }
   }
 
-  void _handleTheme() {
-    _addLine('Theme toggle feature - implement theme switching here',
-        TerminalLineType.info);
-    
-  }
-
   void _handleResume() {
     _addLine('Downloading resume...', TerminalLineType.success);
     _launchUrl('assets/assets/resume/Resume.pdf');
@@ -687,25 +676,28 @@ ${project.githubUrl != null ? 'Source Code: ${project.githubUrl}' : ''}
   }
 
   void _handleNeofetch() {
-    _addLine('', TerminalLineType.system);
+     _addLine('', TerminalLineType.system);
     _addLine(
-        '     ██████████████     akshat@portfolio', TerminalLineType.success);
+        '────▄██▄──▄██▄ ', TerminalLineType.success);
     _addLine(
-        '   ██                ██ ─────────────────', TerminalLineType.success);
+        '───▐█─▀▄▌▐▄▀─█▌', TerminalLineType.success);
     _addLine(
-        '  ██    ████████    ██  OS: Portfolio Web', TerminalLineType.output);
+        '────▀█▄─▌▐─▄█▀ ', TerminalLineType.success);
     _addLine(
-        ' ██    ██      ██    ██ Host: Flutter Web', TerminalLineType.output);
-    _addLine(' ██    ██      ██    ██ Theme: ${AppTheme.primaryColor}',
+        '█▄▄▄▄▄█▌──▐█▄▄▄▄▄█', TerminalLineType.success);
+    _addLine(' ▐█████▀────▀█████▌',TerminalLineType.success);
+    _addLine(
+        'akshat@portfolio', TerminalLineType.success);
+    _addLine(
+        'OS: Portfolio Web', TerminalLineType.output);
+    _addLine(
+        'Host: Flutter Web', TerminalLineType.output);
+    _addLine('Theme: ${AppTheme.primaryColor}',
         TerminalLineType.output);
     _addLine(
-        ' ██    ████████    ██  Shell: terminal.dart', TerminalLineType.output);
-    _addLine('  ██                ██  Skills: Flutter, Python, C++',
+        'Shell: terminal.dart', TerminalLineType.output);
+    _addLine('Location: Delhi, India',
         TerminalLineType.output);
-    _addLine('   ██              ██   Location: Delhi, India',
-        TerminalLineType.output);
-    _addLine(
-        '     ██████████████     University: DTU', TerminalLineType.output);
     _addLine('', TerminalLineType.system);
   }
 
