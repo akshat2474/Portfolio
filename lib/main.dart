@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'theme/app_theme.dart';
 import 'widgets/about_me.dart';
 import 'widgets/technical_skills.dart';
 import 'widgets/projects.dart';
 import 'widgets/personal_interests.dart';
+import 'widgets/terminal.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future main() async {
+Future<void> main() async {
   await dotenv.load(fileName: "dotenv");
   runApp(const PortfolioApp());
 }
@@ -53,6 +55,9 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _interestsKey = GlobalKey();
   bool _isScrolled = false;
+  bool _isTerminalMaximized = false;
+  bool _showTerminal = false;
+  OverlayEntry? _terminalOverlay;
 
   @override
   void initState() {
@@ -64,6 +69,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _terminalOverlay?.remove();
     super.dispose();
   }
 
@@ -98,6 +104,69 @@ class _PortfolioHomeState extends State<PortfolioHome> {
     }
   }
 
+  void _toggleTerminal() {
+    setState(() {
+      _showTerminal = !_showTerminal;
+    });
+
+    if (_showTerminal) {
+      _terminalOverlay = OverlayEntry(
+        builder: (context) => _buildFloatingTerminal(),
+      );
+      Overlay.of(context).insert(_terminalOverlay!);
+    } else {
+      _terminalOverlay?.remove();
+      _terminalOverlay = null;
+      _isTerminalMaximized = false;
+    }
+  }
+
+  void _toggleTerminalMaximize() {
+    setState(() {
+      _isTerminalMaximized = !_isTerminalMaximized;
+    });
+    _terminalOverlay?.markNeedsBuild();
+  }
+
+  Widget _buildFloatingTerminal() {
+    if (_isTerminalMaximized) {
+      return Material(
+        color: Colors.black54,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Terminal(
+            isMaximized: true,
+            onToggleMaximize: _toggleTerminalMaximize,
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      right: 24,
+      bottom: 24,
+      child: Container(
+        width: 600,
+        height: 400,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Terminal(
+          isMaximized: false,
+          onToggleMaximize: _toggleTerminalMaximize,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
@@ -119,7 +188,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                       duration: const Duration(milliseconds: 300),
                       decoration: BoxDecoration(
                         color: _isScrolled
-                            ? AppTheme.backgroundColor.withValues(alpha: .85)
+                            ? AppTheme.backgroundColor.withValues(alpha: 0.85)
                             : Colors.transparent,
                         border: Border(
                           bottom: BorderSide(
@@ -151,6 +220,11 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                                   _ThemeToggleButton(),
                                   const SizedBox(width: 16),
                                   _HoverNavButton(
+                                    text: 'Terminal',
+                                    onPressed: _toggleTerminal,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  _HoverNavButton(
                                     text: 'Resume',
                                     onPressed: _downloadResume,
                                   ),
@@ -176,18 +250,17 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   ),
                 ],
               ),
-              // Interactive floating elements - positioned to not interfere with content
-              Positioned.fill(
-                child: IgnorePointer(
-                  ignoring: false,
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 1200),
-                    margin: const EdgeInsets.symmetric(horizontal: 100),
-                  ),
-                ),
-              ),
             ],
           ),
+          // Floating Terminal Button
+          floatingActionButton: !_showTerminal
+              ? FloatingActionButton(
+                  onPressed: _toggleTerminal,
+                  backgroundColor: AppTheme.primaryColor,
+                  tooltip: 'Open Terminal',
+                  child: const Icon(Icons.terminal, color: Colors.white),
+                )
+              : null,
         );
       },
     );
@@ -358,3 +431,4 @@ class __HoverNavButtonState extends State<_HoverNavButton>
     }
   }
 }
+

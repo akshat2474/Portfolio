@@ -63,7 +63,6 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: darkPrimaryColor,
         surface: darkSurfaceColor,
-        background: darkBackgroundColor,
         onSurface: darkTextPrimary,
       ),
     );
@@ -78,7 +77,6 @@ class AppTheme {
       colorScheme: const ColorScheme.light(
         primary: lightPrimaryColor,
         surface: lightSurfaceColor,
-        background: lightBackgroundColor,
         onSurface: lightTextPrimary,
       ),
     );
